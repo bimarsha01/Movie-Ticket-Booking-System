@@ -1,14 +1,15 @@
 package com.example.userauth.Models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.example.userauth.Models.Enums.EStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,6 +20,13 @@ import lombok.Setter;
 public class Booking extends BaseCreatedAndUpdatedAt{
     @Id
     private Long id;
+
+    @Column(name = "status" , nullable = false)
+    private EStatus eStatus;
+
+
+    @OneToMany(mappedBy = "booking")
+    private Set<ShowSeat> seats = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "show_id" , nullable = false)
