@@ -1,6 +1,8 @@
 package com.example.userauth.Models;
 
 
+import com.example.userauth.Models.Enums.EGenre;
+import com.example.userauth.Models.Enums.EPayment;
 import com.example.userauth.Models.Enums.EStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.Set;
 @Entity
 public class Booking extends BaseCreatedAndUpdatedAt{
     @Id
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "status" , nullable = false)
@@ -35,6 +38,9 @@ public class Booking extends BaseCreatedAndUpdatedAt{
      @ManyToOne
     @JoinColumn(name = "user_id" , nullable = false)
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private EPayment paymentMethod;
 
 
 
