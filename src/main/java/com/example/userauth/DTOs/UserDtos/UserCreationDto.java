@@ -2,11 +2,14 @@ package com.example.userauth.DTOs.UserDtos;
 
 
 import com.example.userauth.ExceptionHandling.fieldErrorConstant;
+import jakarta.annotation.Priority;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,4 +32,6 @@ public class UserCreationDto {
     @NotNull(message = fieldErrorConstant.NOT_NULL)
     @Pattern(regexp="\\d{10}", message="Phone number must be 10 digits")
     private String contact;
+
+    private Set<String> roles;
 }
