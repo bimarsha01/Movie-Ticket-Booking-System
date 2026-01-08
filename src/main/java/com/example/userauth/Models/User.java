@@ -22,7 +22,7 @@ import java.util.Set;
 public class User extends BaseCreatedAndUpdatedAt{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(name = "user_name" , length = 30 ,nullable = false  )
     private String username;

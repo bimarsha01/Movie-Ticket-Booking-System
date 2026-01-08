@@ -37,7 +37,7 @@ public class Movies {
     @Column(name = "title")
     private Set<EGenre> genres = new HashSet<>();
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movies", cascade = CascadeType.ALL)
     private Set<Show> shows = new HashSet<>();
 
 }

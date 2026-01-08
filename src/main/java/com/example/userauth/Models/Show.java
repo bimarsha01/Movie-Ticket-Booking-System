@@ -24,7 +24,7 @@ public class Show extends BaseCreatedAndUpdatedAt{
     @Column(name = "Start_time" , nullable = false)
     private LocalDateTime startTime;
 
-    @Column(name = "Start_time" , nullable = false)
+    @Column(name = "end_time" , nullable = false)
     private LocalDateTime endTime;
 
 
