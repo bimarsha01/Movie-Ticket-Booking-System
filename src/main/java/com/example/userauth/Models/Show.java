@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "shows")
 
 @Entity
 public class Show extends BaseCreatedAndUpdatedAt{

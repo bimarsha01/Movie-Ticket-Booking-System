@@ -11,41 +11,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
 @RestController
 @RequestMapping("/customer")
+@AllArgsConstructor
 public class UserController extends BaseController {
 
-    public final userService userService;
-
+    private final userService userServices;
 
     @PostMapping("/signup/user")
-    public ResponseEntity<ApiResponse> userSignup(@Valid @RequestBody UserCreationDto userCreationDto){
-        log.info("signing up the user");
-        UserResponseDto userResponseDto = userService.save(userCreationDto);
+    public ResponseEntity<ApiResponse> userSignup(@Valid @RequestBody UserCreationDto userCreationDto) {
+        log.info("Signing up the user");
 
-        if ((userResponseDto == null)){
-            log.error("There was an error during the user creation");
-            return ResponseEntity.ok(failureResponse("failed to create user", Boolean.FALSE , null));
-        }
-        else{
-            log.info("user created successfully");
-        return ResponseEntity.ok(successResponse("Created the user successfully" , Boolean.TRUE , userResponseDto));
+        UserResponseDto userResponseDto = userServices.save(userCreationDto);
+
+        if (userResponseDto == null) {
+            log.error("There was an error during user creation");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(failureResponse("Failed to create user", false, null));
+        } else {
+            log.info("User created successfully");
+            return ResponseEntity.ok(successResponse("Created the user successfully", true, userResponseDto));
         }
     }
-
-    @GetMapping("/justget")
-    public ResponseEntity<ApiResponse> justchecking(@Valid @RequestBody UserCreationDto userCreationDto){
-        log.info("signing up the user");
-        int userResponseDto = userService.getthething(userCreationDto);
-
-            return ResponseEntity.ok(successResponse("Created the user successfully" , Boolean.TRUE , userResponseDto));
-        }
 }

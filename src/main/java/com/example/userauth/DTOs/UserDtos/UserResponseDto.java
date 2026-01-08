@@ -21,6 +21,6 @@ public class UserResponseDto {
 
     private String contact;
 
-    private Set<String> roles ;
+//    private Set<String> roles ;
 }
 

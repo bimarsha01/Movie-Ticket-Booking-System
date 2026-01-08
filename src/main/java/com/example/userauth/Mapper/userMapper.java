@@ -17,7 +17,6 @@ public interface userMapper {
     User toEntity(UserCreationDto dto);
 
     @Mapping(target = "id", source = "userId")
-    @Mapping(target = "roles", ignore = true)
     UserResponseDto toDto(User user);
 
     List<UserResponseDto> toDtoList(List<User> userList);

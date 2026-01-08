@@ -9,8 +9,9 @@ import com.example.userauth.Models.User;
 import com.example.userauth.Repo.UserRepo;
 import com.example.userauth.Repo.rolesRepo;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ import java.util.Set;
 @Service
 @Slf4j
 @AllArgsConstructor
+@Getter
+@Setter
 public class userService {
 
     private final userMapper userMapper;
@@ -35,7 +38,7 @@ public class userService {
         String encodedPw = passwordEncoder.encode(userCreationDto.getPassword());
         user.setPassword(encodedPw);
 
-        Roles defaultroles = rolesRepo.findByRoleName(ERole.Role_User)
+        Roles defaultroles = rolesRepo.findByrole(ERole.Role_User)
                 .orElseThrow(() -> new RuntimeException("Error: Role_User not found in DB"));
 
         user.setRoles(Set.of(defaultroles));
