@@ -52,6 +52,7 @@ public class userService {
         User savedUser = userRepo.save(user);
         
         log.info("user saved with id: {}", savedUser.getUserId());
+        log.info("this user is being saved in the database and some fixes needs to be done");
         return userMapper.toDto(savedUser);
     }
 
@@ -73,4 +74,6 @@ public class userService {
         }
         return userMapper.toDto(user);
     }
+
+
 }

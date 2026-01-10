@@ -15,7 +15,5 @@ public class fieldErrorConstant {
     public static final String MOBILE_NUMBER_LENGTH = "mobile.number.length";
     public static final String PAST_PRESENT = "must be before or equal to now";
     public static final String PRESENT_FUTURE = "must be now and from now on";
-    public static final String FUTURE = "must be after now";
-    public static final String PAST = "must be before now";
-    public static final String IS_POSITIVE = "must be greater than zero";
+
 }
