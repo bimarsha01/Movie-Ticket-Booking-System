@@ -29,6 +29,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/customer/**").permitAll()
+                        .requestMatchers("/error").permitAll() // Add this!
                         .anyRequest().authenticated()
                 );
 

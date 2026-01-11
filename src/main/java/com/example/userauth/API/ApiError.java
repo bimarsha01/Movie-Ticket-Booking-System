@@ -13,7 +13,7 @@ import lombok.Setter;
 public class ApiError {
 
         private String error;
-        private Boolean errorCode;
+        private Boolean success;
         private Object data;
 
 

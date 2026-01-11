@@ -3,6 +3,8 @@ package com.example.userauth.Services.User;
 import com.example.userauth.DTOs.UserDtos.SigninDto;
 import com.example.userauth.DTOs.UserDtos.UserCreationDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
+import com.example.userauth.ExceptionHandling.InvalidCredentialsException;
+import com.example.userauth.ExceptionHandling.NotFoundException;
 import com.example.userauth.Mapper.userMapper;
 import com.example.userauth.Models.Enums.ERole;
 import com.example.userauth.Models.Roles;
@@ -58,10 +60,10 @@ public class userService {
 
     public UserResponseDto signin(SigninDto signinDto) {
         User user = userRepo.findByUsername(signinDto.getUsername())
-                .orElseThrow(() -> new RuntimeException("Error: Invalid Username or Password"));
+                .orElseThrow(() -> new InvalidCredentialsException("INVALID_USERNAME" , "User " + signinDto.getUsername() + " Not found"));
 
          if (!passwordEncoder.matches(signinDto.getPassword(), user.getPassword())) {
-             throw new RuntimeException("Error: Invalid Username or Password");
+             throw new InvalidCredentialsException("INVALID" , "The input password is incorrect");
          }
 
         boolean isAdmin = user.getRoles().stream()
