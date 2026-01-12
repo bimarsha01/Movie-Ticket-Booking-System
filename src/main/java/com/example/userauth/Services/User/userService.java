@@ -1,5 +1,6 @@
 package com.example.userauth.Services.User;
 
+import com.example.userauth.Config.JwtService;
 import com.example.userauth.DTOs.UserDtos.SigninDto;
 import com.example.userauth.DTOs.UserDtos.UserCreationDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
@@ -11,12 +12,20 @@ import com.example.userauth.Models.Roles;
 import com.example.userauth.Models.User;
 import com.example.userauth.Repo.UserRepo;
 import com.example.userauth.Repo.rolesRepo;
+import io.jsonwebtoken.Jwt;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +35,7 @@ import java.util.Set;
 @Transactional
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class userService {
@@ -35,6 +44,11 @@ public class userService {
     private final UserRepo userRepo;
     private final rolesRepo rolesRepo;
     private final PasswordEncoder passwordEncoder;
+//    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final AuthenticationManagerBuilder authenticate;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtServices;
+    private final UserDetailsService userDetailsService;
 
     public UserResponseDto save(UserCreationDto userCreationDto){
         log.info("user is being created");
@@ -59,22 +73,13 @@ public class userService {
     }
 
     public UserResponseDto signin(SigninDto signinDto) {
-        User user = userRepo.findByUsername(signinDto.getUsername())
-                .orElseThrow(() -> new InvalidCredentialsException("INVALID_USERNAME" , "User " + signinDto.getUsername() + " Not found"));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinDto.getUsername() , signinDto.getPassword()));
 
-         if (!passwordEncoder.matches(signinDto.getPassword(), user.getPassword())) {
-             throw new InvalidCredentialsException("INVALID" , "The input password is incorrect");
-         }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtServices.generateJwtToken(authentication);
 
-        boolean isAdmin = user.getRoles().stream()
-                .anyMatch(role -> role.getRole() == ERole.Role_Admin);
-
-        if (isAdmin) {
-            log.info("Admin logged in: " + user.getUsername());
-        } else {
-            log.info("Regular user logged in: " + user.getUsername());
-        }
-        return userMapper.toDto(user);
+//         userdetailsimpl =(userDetailsService) authentication.getPrincipal();
+        return null;
     }
 
 
