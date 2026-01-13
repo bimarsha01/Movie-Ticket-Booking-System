@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.userauth.DTOs.Others.jwtResponse;
 
 @Slf4j
 @RestController
@@ -37,11 +38,11 @@ public class UserController extends BaseController {
         }
     }
 
-    @PostMapping("/signin/admin")
+    @PostMapping("/signin")
     public ResponseEntity<ApiResponse> adminSignin(@Valid @RequestBody SigninDto signinDto){
         log.info("Signing in the user");
 
-        UserResponseDto userResponseDto = userServices.signin(signinDto);
+        jwtResponse userResponseDto = userServices.signin(signinDto);
         if (userResponseDto == null) {
             log.error("There was an error during user creation");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

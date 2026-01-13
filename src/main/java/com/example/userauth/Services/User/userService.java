@@ -28,9 +28,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.example.userauth.Helpers.userDetailsImpl;
+import com.example.userauth.DTOs.Others.jwtResponse;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -44,11 +48,11 @@ public class userService {
     private final UserRepo userRepo;
     private final rolesRepo rolesRepo;
     private final PasswordEncoder passwordEncoder;
-//    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final AuthenticationManagerBuilder authenticate;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtServices;
     private final UserDetailsService userDetailsService;
+
 
     public UserResponseDto save(UserCreationDto userCreationDto){
         log.info("user is being created");
@@ -72,14 +76,18 @@ public class userService {
         return userMapper.toDto(savedUser);
     }
 
-    public UserResponseDto signin(SigninDto signinDto) {
+    public jwtResponse signin(SigninDto signinDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinDto.getUsername() , signinDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtServices.generateJwtToken(authentication);
 
-//         userdetailsimpl =(userDetailsService) authentication.getPrincipal();
-        return null;
+        userDetailsImpl userDetails = (userDetailsImpl) authentication.getPrincipal();
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .toList();
+        return new jwtResponse(jwt , "Bearer" , userDetails.getId(), userDetails.getUsername(), roles);
     }
 
 
