@@ -2,6 +2,8 @@ package com.example.userauth.Helpers;
 
 import com.example.userauth.Models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +15,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class userDetailsImpl implements userDetails {
+public class userDetailsImpl implements UserDetails {
     private Long id;
     private String username;
     private String email;
@@ -38,6 +41,7 @@ public class userDetailsImpl implements userDetails {
 
     // This static method converts your DB User into a UserDetailsImpl object
     public static userDetailsImpl build(User user) {
+        log.info("inside the userimpl allright");
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRole().name()))
                 .collect(Collectors.toList());

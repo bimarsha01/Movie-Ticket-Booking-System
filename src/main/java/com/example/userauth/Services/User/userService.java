@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.juli.logging.Log;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -77,18 +78,39 @@ public class userService {
     }
 
     public jwtResponse signin(SigninDto signinDto) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinDto.getUsername() , signinDto.getPassword()));
+        Authentication authentication;
+        try {
+            log.info("S1: before authenticate");
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(signinDto.getUsername(), signinDto.getPassword())
+            );
+            log.info("S2: after authenticate");
+        } catch (Exception e) {
+            log.error("Authentication failed", e);
+            throw e;
+        }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.info("S3: before token");
         String jwt = jwtServices.generateJwtToken(authentication);
+        log.info("S4: after token, jwt = {}", jwt);
 
-        userDetailsImpl userDetails = (userDetailsImpl) authentication.getPrincipal();
+        try {
+            log.info("S5: before getPrincipal");
+            userDetailsImpl userDetails = (userDetailsImpl) authentication.getPrincipal();
+            log.info("S6: after getPrincipal");
 
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .toList();
-        return new jwtResponse(jwt , "Bearer" , userDetails.getId(), userDetails.getUsername(), roles);
+            log.info("S7: before roles stream");
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .toList();
+            log.info("S8: after roles stream, roles={}", roles);
+
+            log.info("S9: before building jwtResponse");
+            return new jwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles);
+        } catch (Exception e) {
+            log.error("S_ERR: failed building jwtResponse", e);
+            throw e;
+        }
     }
-
 
 }

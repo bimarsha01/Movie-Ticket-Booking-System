@@ -9,12 +9,18 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class jwtResponse {
-   private String token;
-   private String type = "Bearer";
-   private long id;
-   private String username;
-   private List<String> roles;
+    private String token;
+    private String type = "Bearer";
+    private Long id;
+    private String username;
+    private List<String> roles;
 
+    // Manual constructor to ensure "Bearer" is handled correctly
+    public jwtResponse(String accessToken, Long id, String username, List<String> roles) {
+        this.token = accessToken;
+        this.id = id;
+        this.username = username;
+        this.roles = roles;
+    }
 }

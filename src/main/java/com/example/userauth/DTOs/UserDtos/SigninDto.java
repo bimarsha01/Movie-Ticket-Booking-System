@@ -14,11 +14,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SigninDto {
-    @NotBlank(message = fieldErrorConstant.NOT_BLANK)
-    @NotNull(message = fieldErrorConstant.NOT_NULL)
+
     private String username;
 
-    @NotBlank(message = fieldErrorConstant.NOT_BLANK)
-    @Size(min = 8 , max = 20 , message = "Minimum of eight characters and maximum of 20 characters")
+    @Size(message = "Minimum of eight characters and maximum of 20 characters")
     private String password;
 }
