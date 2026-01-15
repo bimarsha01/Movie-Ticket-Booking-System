@@ -66,4 +66,17 @@ public class UserController extends BaseController {
 
         return ResponseEntity.ok(successResponse("Password updated successfully", true, null));
     }
+
+
+    @PostMapping("/request/theatreAdmin")
+    @PreAuthorize("hasAuthority('Role_User')")
+    public ResponseEntity<ApiResponse> becomeTheatreAdmin() {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        userServices.applyForTheatreAdmin(username);
+
+        return ResponseEntity.ok(successResponse("PENDING YOUR REQUEST", true, null));
+    }
 }
+

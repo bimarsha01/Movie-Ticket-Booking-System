@@ -31,6 +31,10 @@ public class RoleDataLoader implements CommandLineRunner {
             Roles userRole = new Roles();
             userRole.setRole(ERole.Role_Moderator);
             rolesRepo.save(userRole);
+        }if( rolesRepo.findByrole(ERole.Role_Theatre_Admin).isEmpty()){
+            Roles userRole = new Roles();
+            userRole.setRole(ERole.Role_Theatre_Admin);
+            rolesRepo.save(userRole);
         }
     }
 }

@@ -6,13 +6,18 @@ import com.example.userauth.DTOs.UserDtos.SigninDto;
 import com.example.userauth.DTOs.UserDtos.UserCreationDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
 import com.example.userauth.ExceptionHandling.InvalidCredentialsException;
+import com.example.userauth.ExceptionHandling.NotAvailableException;
 import com.example.userauth.ExceptionHandling.NotFoundException;
 import com.example.userauth.Mapper.userMapper;
+import com.example.userauth.Models.AdminRequestForTheatre;
 import com.example.userauth.Models.Enums.ERole;
+import com.example.userauth.Models.Enums.EStatus;
 import com.example.userauth.Models.Roles;
 import com.example.userauth.Models.User;
+import com.example.userauth.Repo.AdminRequestRepo;
 import com.example.userauth.Repo.UserRepo;
 import com.example.userauth.Repo.rolesRepo;
+import com.sun.jdi.request.DuplicateRequestException;
 import io.jsonwebtoken.Jwt;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -33,6 +38,7 @@ import org.springframework.stereotype.Service;
 import com.example.userauth.Helpers.userDetailsImpl;
 import com.example.userauth.DTOs.Others.jwtResponse;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -54,6 +60,7 @@ public class userService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtServices;
     private final UserDetailsService userDetailsService;
+    private final AdminRequestRepo adminRequestRepo;
 
 
     public UserResponseDto save(UserCreationDto userCreationDto){
@@ -125,5 +132,18 @@ public class userService {
 
         user.setPassword(passwordEncoder.encode(cp.getNewPassword()));
         userRepo.save(user);
+    }
+
+    @Transactional
+    public void applyForTheatreAdmin(String username) {
+        User user = userRepo.findByUsername(username).orElseThrow(()->new NotFoundException("NOT_FOUND" , "Username not found"));
+
+        if(adminRequestRepo.existsByUserAndStatus(user , EStatus.Pending)){
+            throw new DuplicateRequestException();
+        }
+        AdminRequestForTheatre adminRequestForTheatre = new AdminRequestForTheatre();
+        adminRequestForTheatre.setUser(user);
+        adminRequestForTheatre.setStatus(EStatus.Pending);
+        adminRequestRepo.save(adminRequestForTheatre);
     }
 }

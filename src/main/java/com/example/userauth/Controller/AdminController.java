@@ -1,6 +1,7 @@
 package com.example.userauth.Controller;
 
 import com.example.userauth.API.ApiResponse;
+import com.example.userauth.DTOs.AdminRequestDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
 import com.example.userauth.Services.User.AdminServices;
 import lombok.AllArgsConstructor;
@@ -72,6 +73,15 @@ public class AdminController extends BaseController{
                 log.info("Users Loaded successfully");
                 return ResponseEntity.ok(successResponse("User " + username + " changed to admin successfully", true, userResponseDto));
             }
+        }
+        @GetMapping("/newRequestForTheatre/Pending")
+        @PreAuthorize("hasAuthority('Role_Admin')")
+    public ResponseEntity<ApiResponse> pendingRequest(){
+        List<AdminRequestDto> adminRequestDtos = adminServices.pendingTheatreRequest();
+        if(adminRequestDtos == null){
+            throw new NullPointerException();
+        }
+        return ResponseEntity.ok(successResponse("LIST OF THE PENDING APPLICANTS " , true  , adminRequestDtos));
         }
     }
 

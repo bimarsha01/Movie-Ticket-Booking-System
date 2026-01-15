@@ -1,12 +1,17 @@
 package com.example.userauth.Services.User;
 
+import com.example.userauth.DTOs.AdminRequestDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
 import com.example.userauth.ExceptionHandling.NotAvailableException;
 import com.example.userauth.ExceptionHandling.NotFoundException;
+import com.example.userauth.Mapper.AdminRequestMapper;
 import com.example.userauth.Mapper.userMapper;
+import com.example.userauth.Models.AdminRequestForTheatre;
 import com.example.userauth.Models.Enums.ERole;
+import com.example.userauth.Models.Enums.EStatus;
 import com.example.userauth.Models.Roles;
 import com.example.userauth.Models.User;
+import com.example.userauth.Repo.AdminRequestRepo;
 import com.example.userauth.Repo.UserRepo;
 import com.example.userauth.Repo.rolesRepo;
 import jakarta.transaction.Transactional;
@@ -33,6 +38,8 @@ public class AdminServices {
     private final UserRepo userRepo;
     private final userMapper userMapper;
     private final rolesRepo rolesRepo;
+    private final AdminRequestRepo adminRequestRepo;
+    private final AdminRequestMapper adminRequestMapper;
 
     public List<UserResponseDto> getAllUsers() {
         log.info("finding all the users");
@@ -65,5 +72,12 @@ public class AdminServices {
        User updated =  userRepo.save(user);
 
         return userMapper.toDto(updated);
+    }
+
+    public List<AdminRequestDto> pendingTheatreRequest() {
+
+        List<AdminRequestForTheatre> adminRequestForTheatre = adminRequestRepo.findByStatus(EStatus.Pending);
+
+       return adminRequestMapper.toDtoList(adminRequestForTheatre);
     }
 }
