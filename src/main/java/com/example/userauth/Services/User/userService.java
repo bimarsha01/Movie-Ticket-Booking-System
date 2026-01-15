@@ -1,6 +1,7 @@
 package com.example.userauth.Services.User;
 
 import com.example.userauth.Config.JwtService;
+import com.example.userauth.DTOs.ChangepasswordDto;
 import com.example.userauth.DTOs.UserDtos.SigninDto;
 import com.example.userauth.DTOs.UserDtos.UserCreationDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
@@ -113,4 +114,16 @@ public class userService {
         }
     }
 
+    public void  changePassword(String username, @Valid ChangepasswordDto cp) {
+
+        User user = userRepo.findByUsername(username).orElseThrow(()-> new NotFoundException("NOT_FOUND" , "Username " + username+ " not found"));
+
+        if(!passwordEncoder.matches(cp.getOldPassword() , user.getPassword())){
+            throw new InvalidCredentialsException("INCORRECT CREDENTIALS" , " Old Password did not matched ");
+
+        }
+
+        user.setPassword(passwordEncoder.encode(cp.getNewPassword()));
+        userRepo.save(user);
+    }
 }

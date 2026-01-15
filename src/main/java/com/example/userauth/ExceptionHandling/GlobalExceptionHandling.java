@@ -100,9 +100,9 @@ public class GlobalExceptionHandling extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleException(Exception ex){
-        ApiResponse error = new ApiResponse("something went wrong" , Boolean.FALSE , "");
-        return new ResponseEntity<>(error ,HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ApiResponse> handleException(Exception ex){
+//        ApiResponse error = new ApiResponse("something went wrong" , Boolean.FALSE , "");
+//        return new ResponseEntity<>(error ,HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }

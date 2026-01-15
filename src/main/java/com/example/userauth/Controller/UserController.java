@@ -2,6 +2,7 @@ package com.example.userauth.Controller;
 
 
 import com.example.userauth.API.ApiResponse;
+import com.example.userauth.DTOs.ChangepasswordDto;
 import com.example.userauth.DTOs.UserDtos.SigninDto;
 import com.example.userauth.DTOs.UserDtos.UserCreationDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
@@ -11,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import com.example.userauth.DTOs.Others.jwtResponse;
 
@@ -51,5 +54,16 @@ public class UserController extends BaseController {
             log.info("User created successfully");
             return ResponseEntity.ok(successResponse("Created the user successfully", true, userResponseDto));
         }
+    }
+
+    @PostMapping("/change-password")
+    @PreAuthorize("hasAnyAuthority('Role_User' , 'Role_Admin' , 'Role_Theatre_Admin')")
+    public ResponseEntity<ApiResponse> changePassword(@RequestBody ChangepasswordDto cp){
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+         userServices.changePassword(username , cp);
+
+        return ResponseEntity.ok(successResponse("Password updated successfully", true, null));
     }
 }
