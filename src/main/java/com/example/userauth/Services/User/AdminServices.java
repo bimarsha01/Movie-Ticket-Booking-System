@@ -31,8 +31,7 @@ import java.util.Set;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Getter
-@Setter
+
 public class AdminServices {
 
     private final UserRepo userRepo;

@@ -3,7 +3,7 @@ package com.example.userauth.Controller;
 import com.example.userauth.API.ApiResponse;
 import com.example.userauth.DTOs.TheatreDtos.TheatreCreationDto;
 import com.example.userauth.DTOs.TheatreDtos.TheatreResponseDto;
-import com.example.userauth.Services.User.TheatreAdminServices;
+import com.example.userauth.Services.Theatre.TheatreAdminServices;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

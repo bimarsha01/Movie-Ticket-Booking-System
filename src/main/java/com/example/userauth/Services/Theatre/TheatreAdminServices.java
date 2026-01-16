@@ -1,4 +1,4 @@
-package com.example.userauth.Services.User;
+package com.example.userauth.Services.Theatre;
 
 import com.example.userauth.DTOs.TheatreDtos.TheatreCreationDto;
 import com.example.userauth.DTOs.TheatreDtos.TheatreResponseDto;
@@ -22,8 +22,6 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Getter
-@Setter
 public class TheatreAdminServices {
 
     private final UserRepo userRepo;

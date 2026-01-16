@@ -48,8 +48,6 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Getter
-@Setter
 public class userService {
 
     private final userMapper userMapper;
