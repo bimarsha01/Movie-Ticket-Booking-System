@@ -19,5 +19,6 @@ public class TheatreResponseDto {
     private String name;
     private String contact;
     private String location;
+    private String userOwnerName;
     private Set<Screens> screensSet;
 }

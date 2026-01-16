@@ -13,8 +13,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdminRequestDto {
-    private User user;
-    private Set<String> status;
-
-
+    private Long id;
+    private Long userId;
+    private String username;
+    private String status;
+    private String adminComment;
 }

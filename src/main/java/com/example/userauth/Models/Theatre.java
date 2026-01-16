@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 
 @Entity
-public class Theatre {
+public class Theatre extends BaseCreatedAndUpdatedAt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +28,7 @@ public class Theatre {
     private String location;
 
     @Column(name = "contact" , length = 10 , nullable = false)
-    private Integer contact;
+    private String contact;
 
     @OneToMany(mappedBy = "theatre")
     private Set<Screens> screens = new HashSet<>();
@@ -36,6 +36,10 @@ public class Theatre {
     @OneToMany(mappedBy = "theatre", cascade = CascadeType.ALL)
     private Set<Show> shows = new HashSet<>();
 
+
+    @ManyToOne
+    @JoinColumn(name = "TheatreUserOwner_id")
+    private User user;
 
 
 }

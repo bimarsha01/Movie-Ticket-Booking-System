@@ -26,4 +26,6 @@ public class TheatreCreationDto {
     @NotBlank(message = fieldErrorConstant.NOT_BLANK)
     @NotNull(message = fieldErrorConstant.NOT_NULL)
     private String location;
+
+
 }

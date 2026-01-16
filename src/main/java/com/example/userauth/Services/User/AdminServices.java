@@ -80,4 +80,26 @@ public class AdminServices {
 
        return adminRequestMapper.toDtoList(adminRequestForTheatre);
     }
+
+
+
+    public AdminRequestDto approveRequest(Long Id) {
+
+        AdminRequestForTheatre adminRequestForTheatre = adminRequestRepo.findById(Id).orElseThrow(()->new NotFoundException("NOT_FOUND" , "THE ID" + Id + " is not in the DB"));
+
+        adminRequestForTheatre.setStatus(EStatus.Successful);
+
+        Roles theatreRole = rolesRepo.findByrole(ERole.Role_Theatre_Admin).orElseThrow(()->new NotFoundException("NOT_FOUND" , "THIS ROLE IS NOT IN THE DB"));
+
+        Set<Roles> newRoles = new HashSet<>();
+        newRoles.add(theatreRole);
+
+        User user = adminRequestForTheatre.getUser();
+        user.setRoles(newRoles);
+        userRepo.save(user);
+        log.info("this is the role " + user.getRoles());
+
+        adminRequestRepo.save(adminRequestForTheatre);
+        return adminRequestMapper.toDto(adminRequestForTheatre);
+    }
 }

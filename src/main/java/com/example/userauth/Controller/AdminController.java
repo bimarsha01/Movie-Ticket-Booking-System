@@ -3,6 +3,7 @@ package com.example.userauth.Controller;
 import com.example.userauth.API.ApiResponse;
 import com.example.userauth.DTOs.AdminRequestDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
+import com.example.userauth.Models.AdminRequestForTheatre;
 import com.example.userauth.Services.User.AdminServices;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -82,6 +83,16 @@ public class AdminController extends BaseController{
             throw new NullPointerException();
         }
         return ResponseEntity.ok(successResponse("LIST OF THE PENDING APPLICANTS " , true  , adminRequestDtos));
+        }
+
+        @PostMapping("/newRequest/approve/{Id}")
+        @PreAuthorize("hasAuthority('Role_Admin')")
+        public  ResponseEntity<ApiResponse> approveRequest(@PathVariable Long Id){
+        AdminRequestDto adminRequestDto = adminServices.approveRequest(Id);
+        if(adminRequestDto == null){
+            return ResponseEntity.ok(failureResponse("THE APPROVAL WAS NOT COMPLETED" , false , null));
+        }
+        return ResponseEntity.ok(successResponse("Successful" , true , adminRequestDto));
         }
     }
 
