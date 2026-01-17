@@ -46,6 +46,7 @@ public class ScreenServices {
 
        Screens entity = screenMapper.toEntity(screenCreationDto);
        entity.setTheatre(theatre);
+       entity.setTotalSeats(screenCreationDto.getSeatsPerRow()*screenCreationDto.getTotalRows());
 
        screensRepo.save(entity);
 

@@ -1,5 +1,5 @@
 package com.example.userauth.Models.Enums;
 
 public enum EGenre {
-    Action , Thriller , Comedy , RomCom , SciFi , Horror , Romance , Drama;
+    ACTION , THRILLER , COMEDY , ROM_COM , SCI_FI , HORROR , ROMANCE , DRAMA , ADVENTURE , ANIMATION , CRIME , FAMILY , FANTASY , COMING_OF_AGE;
 }

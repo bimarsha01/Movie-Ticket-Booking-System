@@ -30,6 +30,9 @@ public class Screens {
     @Column(name = "seat_per_row", nullable = false)
     private Integer seatsPerRow;
 
+     @Column(name = "total_seats", nullable = false)
+    private Integer totalSeats;
+
     @ManyToOne
     @JoinColumn(name = "theatre_id", nullable = false)
     private Theatre theatre;

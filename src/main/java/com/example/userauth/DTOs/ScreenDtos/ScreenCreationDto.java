@@ -22,17 +22,12 @@ import java.util.Set;
 @AllArgsConstructor
 public class ScreenCreationDto {
 
-
-        @NotNull(message = "Screen number is required")
         private Integer screenNo;
 
-        @NotNull(message = "Theatre ID is required")
         private Long theatreId;
 
-        @Min(value = 1, message = "Must have at least 1 row")
         private Integer totalRows;
 
-        @Min(value = 1, message = "Must have at least 1 column")
         private Integer seatsPerRow;
     }
 

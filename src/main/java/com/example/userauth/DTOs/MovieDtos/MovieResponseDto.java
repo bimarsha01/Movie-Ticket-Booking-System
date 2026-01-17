@@ -17,7 +17,7 @@ public class MovieResponseDto {
 
     private Long id;
     private String title;
-    private String Description;
-    private Integer Duration;
+    private String description;
+    private Integer duration;
     private Set<String> genres;
 }

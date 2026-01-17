@@ -34,7 +34,7 @@ public class Movies {
     @ElementCollection(targetClass = EGenre.class)
     @CollectionTable(name = "movie_genre", joinColumns = @JoinColumn(name = "movie_id"))
     @Enumerated(EnumType.STRING)
-    @Column(name = "title")
+    @Column(name = "genre_name" , length = 50)
     private Set<EGenre> genres = new HashSet<>();
 
     @OneToMany(mappedBy = "movies", cascade = CascadeType.ALL)

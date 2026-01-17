@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/screen")
 @AllArgsConstructor
-public class ScreenController {
+public class ScreenController extends BaseController {
 
     private final ScreenServices screenServices;
 
@@ -27,5 +27,10 @@ public class ScreenController {
     public ResponseEntity<ApiResponse> addScreen(@RequestBody ScreenCreationDto screenCreationDto){
         ScreenResponseDto screenResponseDto = screenServices.addScreen(screenCreationDto);
 
+        if(screenResponseDto == null){
+            return ResponseEntity.ok(failureResponse("THE OPERATION DID NOT CARRIED ON " , false , null));
+
+        }
+        return ResponseEntity.ok(successResponse("SCREEN CREATED SUCCESSFULLY " , true , screenResponseDto));
     }
 }
