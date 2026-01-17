@@ -1,6 +1,7 @@
 package com.example.userauth.Models;
 
 
+import com.example.userauth.Models.Enums.EGenre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 
 @Getter
@@ -43,5 +45,7 @@ public class Show extends BaseCreatedAndUpdatedAt{
     @ManyToOne
     @JoinColumn(name = "screen_id" , nullable = false)
     private Screens screens;
+
+
 
 }

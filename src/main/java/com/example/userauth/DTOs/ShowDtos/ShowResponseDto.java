@@ -1,18 +1,17 @@
 package com.example.userauth.DTOs.ShowDtos;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class showResponseDto {
+public class ShowResponseDto {
 
     private Long id;
 
@@ -24,12 +23,7 @@ public class showResponseDto {
 
     private String movieName;
 
-    private String movieLanguage;
+    private String screenNo;
 
-    private String ScreenNo;
-
-
-    private Long movieId;
-
-    private Long screenId;
+    private Set<String> genre;
 }

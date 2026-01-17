@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/screen")
@@ -32,5 +34,12 @@ public class ScreenController extends BaseController {
 
         }
         return ResponseEntity.ok(successResponse("SCREEN CREATED SUCCESSFULLY " , true , screenResponseDto));
+    }
+    @PostMapping("/getScreen")
+    @PreAuthorize("hasAuthority('Role_Theatre_Admin')")
+    public ResponseEntity<ApiResponse> getAllScreens(){
+        List<ScreenResponseDto> screenResponseDtos = screenServices.getAllScreens();
+
+        return ResponseEntity.ok(successResponse("Screen fetching successfully" , true , screenResponseDtos));
     }
 }

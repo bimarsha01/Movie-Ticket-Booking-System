@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface theatreRepo  extends JpaRepository<Theatre, Long> {
     List<Theatre> getTheatresByUser_Username(String userUsername);
+
+    Theatre findByUser_Username(String userUsername);
 }

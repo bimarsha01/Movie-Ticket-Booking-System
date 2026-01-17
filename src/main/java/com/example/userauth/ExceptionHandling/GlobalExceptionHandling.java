@@ -41,12 +41,23 @@ public class GlobalExceptionHandling extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(HandleDataException.class)
     public ResponseEntity<ApiResponse> handleResourceException(HandleDataException ex){
-        ApiResponse error = new ApiResponse(ex.getMessage() , Boolean.FALSE , "gggg");
+        ApiResponse error = new ApiResponse(ex.getMessage() , Boolean.FALSE , "");
+        return new ResponseEntity<>(error , HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiResponse> unauthorizedException(UnauthorizedException ex){
+        ApiResponse error = new ApiResponse(ex.getMessage() , Boolean.FALSE , "");
         return new ResponseEntity<>(error , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(HandleTimeExceedException.class)
     public ResponseEntity<ApiError> handleTimeExceedException(HandleTimeExceedException ex){
+        ApiError error = new ApiError(ex.getErrorCode(), Boolean.FALSE, ex.getMessage());
+        return new ResponseEntity<>(error , BAD_REQUEST);
+
+    }
+    @ExceptionHandler(AlreadyExistException.class)
+    public ResponseEntity<ApiError> AlreadyExistException(AlreadyExistException ex){
         ApiError error = new ApiError(ex.getErrorCode(), Boolean.FALSE, ex.getMessage());
         return new ResponseEntity<>(error , BAD_REQUEST);
 

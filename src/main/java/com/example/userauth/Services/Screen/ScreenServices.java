@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -36,21 +37,41 @@ public class ScreenServices {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-       Theatre theatre = theatreRepo.findById(screenCreationDto.getTheatreId()).
-               orElseThrow(()-> new NotFoundException("NOT_FOUND " , "The theatre you are inserted does not exist"));
+        Theatre theatre = theatreRepo.findById(screenCreationDto.getTheatreId()).
+                orElseThrow(() -> new NotFoundException("NOT_FOUND ", "The theatre you are inserted does not exist"));
 
-       if(!theatre.getUser().getUsername().equals(username)){
-           throw new BadCredentialsException("You cannot access this theatre");
+        if (!theatre.getUser().getUsername().equals(username)) {
+            throw new BadCredentialsException("You cannot access this theatre");
 
-           }
+        }
 
-       Screens entity = screenMapper.toEntity(screenCreationDto);
-       entity.setTheatre(theatre);
-       entity.setTotalSeats(screenCreationDto.getSeatsPerRow()*screenCreationDto.getTotalRows());
+        Screens entity = screenMapper.toEntity(screenCreationDto);
+        entity.setTheatre(theatre);
+        entity.setTotalSeats(screenCreationDto.getSeatsPerRow() * screenCreationDto.getTotalRows());
 
-       screensRepo.save(entity);
+        screensRepo.save(entity);
 
-       return screenMapper.toDto(entity);
+        return screenMapper.toDto(entity);
 
+    }
+
+
+    public List<ScreenResponseDto> getAllScreens() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Theatre theatre = theatreRepo.findByUser_Username(username);
+
+        if (theatre == null) {
+            throw new NotFoundException("THEATRE_NOT_FOUND", "Theatre not found for user: " + username);
+        }
+
+        return theatre.getScreens().stream()
+                .map(screen -> new ScreenResponseDto(
+                        screen.getId(),
+                        screen.getScreenNo(),
+                        theatre.getId(),
+                        screen.getTotalRows(),
+                        screen.getSeatsPerRow(),
+                        screen.getTotalSeats()
+                )).toList();
     }
 }

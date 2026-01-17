@@ -1,16 +1,12 @@
 package com.example.userauth.DTOs.ScreenDtos;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class ScreenResponseDto {
 
     private Long id;
@@ -22,4 +18,6 @@ public class ScreenResponseDto {
     private Integer totalRows;
 
     private Integer seatsPerRow;
+
+    private Integer totalSeats;
 }
