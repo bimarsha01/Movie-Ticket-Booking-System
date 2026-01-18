@@ -13,4 +13,6 @@ public interface moviesRepo extends JpaRepository<Movies , Long> {
 
 
     boolean existsByTitle(String title);
+
+    Movies getMoviesById(Long id);
 }
