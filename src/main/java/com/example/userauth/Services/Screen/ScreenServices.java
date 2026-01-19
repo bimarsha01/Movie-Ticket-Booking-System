@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.example.userauth.Services.Theatre.TheatreServices;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -32,6 +33,7 @@ public class ScreenServices {
     private final UserRepo userRepo;
     private final theatreRepo theatreRepo;
     private final ScreenMapper screenMapper;
+    private final TheatreServices theatreServices;
 
     public ScreenResponseDto addScreen(ScreenCreationDto screenCreationDto) {
 
@@ -50,7 +52,7 @@ public class ScreenServices {
         entity.setTotalSeats(screenCreationDto.getSeatsPerRow() * screenCreationDto.getTotalRows());
 
         screensRepo.save(entity);
-
+        theatreServices.generatePhysicalSeatsForScreen(entity.getId());
         return screenMapper.toDto(entity);
 
     }

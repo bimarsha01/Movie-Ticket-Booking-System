@@ -1,11 +1,14 @@
 package com.example.userauth.Controller;
 
 import com.example.userauth.API.ApiResponse;
-import com.example.userauth.DTOs.MovieDtos.MovieResponseDto;
+import com.example.userauth.DTOs.SeatDtos.SeatResponseDto;
 import com.example.userauth.DTOs.ShowDtos.ShowResponseDto;
+import com.example.userauth.DTOs.ShowSeat.ShowSeatResponseDto;
 import com.example.userauth.DTOs.TheatreDtos.TheatreResponseDto;
 import com.example.userauth.Helpers.MovieMinInfo;
+import com.example.userauth.Repo.showSeatRepo;
 import com.example.userauth.Services.Theatre.TheatreServices;
+import com.example.userauth.Services.User.AdminServices;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,8 @@ import java.util.List;
 public class TheatreController extends BaseController{
 
     private final TheatreServices theatreServices;
+    private final showSeatRepo showSeatRepo;
+    private final AdminServices adminServices;
 
     @GetMapping("/show-all-theatres")
     @PreAuthorize("hasAnyAuthority('Role_User' , 'Role_Admin' , 'Role_Theatre_Admin')")
@@ -47,18 +52,11 @@ public class TheatreController extends BaseController{
         return ResponseEntity.ok(successResponse("Movies for the theatre " + theatreId , true , showResponseDto));
     }
 
-    @PostMapping("/admin/backfill-seats")
-    @PreAuthorize("hasAuthority('Role_Admin')")
-    public ResponseEntity<String> backfill() {
-        theatreServices.generateSeatsForExistingShows();
-        return ResponseEntity.ok("All existing shows now have 225 seats generated!");
-    }
-
-    @GetMapping("/count")
-    @PreAuthorize("hasAuthority('Role_Admin')")
-    public ResponseEntity<String> something(){
-      Long number =  theatreServices.countGeneratedSeats();
-        return ResponseEntity.ok("this is the number " + number);
+    @GetMapping("/show-all-theatres/{theatreId}/{movieId}/{showId}/shows")
+    @PreAuthorize("hasAuthority('Role_User')")
+    public ResponseEntity<ApiResponse> getShowdetailsAndSeatDetails(@PathVariable Long theatreId , @PathVariable Long movieId , @PathVariable Long showId){
+        List<ShowSeatResponseDto> showSeatResponseDto = theatreServices.getAllSeats(theatreId , movieId , showId);
+        return ResponseEntity.ok(successResponse("Seats for show with id :" + showId , true , showSeatResponseDto));
     }
 
 }

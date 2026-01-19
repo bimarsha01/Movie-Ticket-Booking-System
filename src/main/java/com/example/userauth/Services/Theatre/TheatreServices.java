@@ -1,7 +1,9 @@
 package com.example.userauth.Services.Theatre;
 
 import com.example.userauth.DTOs.MovieDtos.MovieResponseDto;
+import com.example.userauth.DTOs.SeatDtos.SeatResponseDto;
 import com.example.userauth.DTOs.ShowDtos.ShowResponseDto;
+import com.example.userauth.DTOs.ShowSeat.ShowSeatResponseDto;
 import com.example.userauth.DTOs.TheatreDtos.TheatreResponseDto;
 import com.example.userauth.Helpers.MovieMinInfo;
 import com.example.userauth.Mapper.MovieMapper;
@@ -25,11 +27,11 @@ public class TheatreServices {
     private final theatreRepo theatreRepo;
     private final TheatreMapper theatreMapper;
     private final showRepo showRepo;
-    private final moviesRepo moviesRepo;
-    private final MovieMapper movieMapper;
     private final ShowMapper showMapper;
-    private final showSeatRepo showSeatRepo;
     private final seatRepo seatRepo;
+    private final showSeatRepo showSeatRepo;
+    private final screensRepo screensRepo;
+
 
     public List<TheatreResponseDto> showAllTheatre() {
         List<Theatre> theatre = theatreRepo.findAll();
@@ -51,32 +53,66 @@ public class TheatreServices {
 
         return showMapper.toDtoList(show);
     }
-    public void generateSeatsForExistingShows() {
+
+    public void fixExistingShows() {
         List<Show> allShows = showRepo.findAll();
+        log.info("Starting fix for " + allShows.size() + " shows.");
 
         for (Show show : allShows) {
+            // Find physical seats for the screen
+            List<Seat> physicalSeats = seatRepo.findByScreen_Id(show.getScreens().getId());
 
-            List<ShowSeat> existing = showSeatRepo.findByShow_Id(show.getId());
+            if (physicalSeats.isEmpty()) {
+                log.warn("SKIPPING Show " + show.getId() + " because Screen " + show.getScreens().getId() + " has NO physical seats!");
+                continue;
+            }
 
-            if (existing.isEmpty()) {
-                List<Seat> physicalSeats = seatRepo.findByScreen_Id(show.getScreens().getId());
-                List<ShowSeat> newShowSeats = new ArrayList<>();
-                for (Seat physicalSeat : physicalSeats) {
-                    ShowSeat showSeat = new ShowSeat();
-                    showSeat.setShow(show);
-                    showSeat.setSeat(physicalSeat);
-                    showSeat.setReserved(false);
-                    newShowSeats.add(showSeat);
+            // Check if show_seats already exist
+            if (showSeatRepo.findByShow_Id(show.getId()).isEmpty()) {
+                log.info("Working on Show " + show.getId() + ". Found " + physicalSeats.size() + " physical seats.");
+
+                for (Seat s : physicalSeats) {
+                    ShowSeat ss = new ShowSeat();
+                    ss.setShow(show);
+                    ss.setSeat(s);
+                    ss.setReserved(false);
+                    showSeatRepo.save(ss);
                 }
-                showSeatRepo.saveAll(newShowSeats);
-                log.info("Successfully generated {} seats for Show ID: {}", newShowSeats.size(), show.getId());
+
+                // This is the most important line!
+                showSeatRepo.flush();
+                log.info("REAL SUCCESS: Inserted seats for Show ID " + show.getId());
             } else {
-                log.info("Show ID: {} already has seats. Skipping.", show.getId());
+                log.info("Show " + show.getId() + " already has seats. Skipping.");
             }
         }
     }
 
-    public long countGeneratedSeats() {
-        return showSeatRepo.count();
+    public void generatePhysicalSeatsForScreen(Long screenId) {
+        Screens screen = screensRepo.findById(screenId).orElseThrow();
+
+        for (int row = 1; row <= screen.getTotalRows(); row++) {
+            for (int col = 1; col <= screen.getSeatsPerRow(); col++) {
+                Seat seat = new Seat();
+                seat.setRowNo(row);
+                seat.setSeatNo(col);
+                seat.setScreen(screen);
+                seatRepo.save(seat);
+            }
+        }
+    }
+
+    public List<ShowSeatResponseDto> getAllSeats(Long theatreId, Long movieId, Long showId) {
+
+        List<ShowSeat> showSeats = showSeatRepo.findByShow_Id(showId);
+        return showSeats.stream().map(showSeat -> {
+            ShowSeatResponseDto dto = new ShowSeatResponseDto();
+            dto.setId(showSeat.getId());
+            dto.setSeatNumber(showSeat.getSeat().getSeatNo());
+            dto.setRowNumber(showSeat.getSeat().getRowNo());
+            dto.setReserved(showSeat.isReserved());
+            dto.setPrice(showSeat.getShow().getPrice());
+            return  dto;
+        }).toList();
     }
 }

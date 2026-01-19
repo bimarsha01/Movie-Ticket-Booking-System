@@ -22,11 +22,11 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "seatsperrow" , length = 5 , nullable = false)
-    private Integer seatsPerRow;
+    @Column(name = "seat_no")
+    private Integer seatNo;
 
-@Column(name = "noofrows" , length = 5 , nullable = false)
-private Integer numberOfRows;
+    @Column(name = "row_no")
+    private Integer rowNo;
 
 @ManyToOne
 @JoinColumn(name = "screen_id" , nullable = false)

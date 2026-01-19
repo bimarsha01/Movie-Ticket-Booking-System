@@ -32,6 +32,8 @@ public class ShowServices {
     private final moviesRepo moviesRepo;
     private final ShowMapper showMapper;
     private final showRepo showRepo;
+    private final seatRepo seatRepo;
+    private final showSeatRepo showSeatRepo;
 
     public List<ShowResponseDto> addShows(List<ShowCreationDto> showCreationDto) {
         log.info("Show being checked");
@@ -64,12 +66,8 @@ public class ShowServices {
             LocalDateTime startTime = dto.getStartTime();
             LocalDateTime endTime = startTime.plusMinutes(movie.getDuration() + 15);
 
-            // Check against DB shows for this specific screen
-            boolean showsCollisionInDb = screens.getShows().stream().anyMatch(existingShow -> {
-                return startTime.isBefore(existingShow.getEndTime()) && endTime.isAfter(existingShow.getStartTime());
-            });
+            boolean showsCollisionInDb = screens.getShows().stream().anyMatch(existingShow -> startTime.isBefore(existingShow.getEndTime()) && endTime.isAfter(existingShow.getStartTime()));
 
-            // Check against shows in the current batch
             boolean collisionInCurrentList = toSaveRightNow.stream()
                     .filter(s -> s.getScreens().getId().equals(dto.getScreenId()))
                     .anyMatch(newShow -> startTime.isBefore(newShow.getEndTime()) && endTime.isAfter(newShow.getStartTime()));
@@ -90,6 +88,23 @@ public class ShowServices {
         log.info("Saving the show ");
         List<Show> savedShows = showRepo.saveAll(toSaveRightNow);
 
+        for(Show savedshow : savedShows){
+            List<Seat> physicalSeats = seatRepo.findByScreen_Id(savedshow.getScreens().getId());
+            if(physicalSeats.isEmpty()){
+                throw new NotFoundException("SEAT_NOT_FOUND" , "No seat found in the screen with id " + savedshow.getScreens().getId());
+            }
+
+            List<ShowSeat> tickets = new ArrayList<>();
+            for(Seat physicalSeat : physicalSeats){
+                ShowSeat showSeat = new ShowSeat();
+                showSeat.setShow(savedshow);
+                showSeat.setSeat(physicalSeat);
+                showSeat.setReserved(false);
+                tickets.add(showSeat);
+            }
+            showSeatRepo.saveAll(tickets);
+            log.info("Successfully generated {} total tickets across {} shows", tickets.size(), savedShows.size());
+        }
         return savedShows.stream()
                 .map(showMapper::toDto)
                 .toList();
@@ -98,7 +113,6 @@ public class ShowServices {
     public List<ShowResponseDto> getAllShows() {
 
     List<Show> AllShows = showRepo.findAllByEndTimeAfter(LocalDateTime.now());
-//    List<Show> AllShows = showRepo.findAll();
 
     return showMapper.toDtoList(AllShows);
 
