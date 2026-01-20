@@ -8,10 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -20,11 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookingController {
     private final BookingServices bookingServices;
 
-    @PostMapping("/book")
-    @PreAuthorize("hasAuthority('Role_User')")
+//    @PostMapping("/book")
+//    @PreAuthorize("hasAuthority('Role_User')")
+//
+//    public ResponseEntity<ApiResponse> bookShow(@RequestBody BookingCreationDto bookingCreationDto){
+//        BookingResponseDto bookingResponseDto = bookingServices.bookShow(bookingCreationDto);
+//        return null;
+//    }
 
-    public ResponseEntity<ApiResponse> bookShow(@RequestBody BookingCreationDto bookingCreationDto){
-        BookingResponseDto bookingResponseDto = bookingServices.bookShow(bookingCreationDto);
-        return null;
+    @PostMapping("/booking/show/{showId}")
+    @PreAuthorize("hasAuthority('Role_User')")
+    public ResponseEntity<ApiResponse> bookShow(@PathVariable Long showId , BookingCreationDto BookingCreationDto){
+        BookingResponseDto bookingResponseDto = bookingServices.bookShow(showId , BookingCreationDto );
     }
 }

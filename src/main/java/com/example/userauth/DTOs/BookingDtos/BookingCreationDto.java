@@ -17,9 +17,6 @@ import java.util.List;
 public class BookingCreationDto {
 
         @NotBlank(message = fieldErrorConstant.NOT_BLANK)
-        private Long showId;
-
-        @NotBlank(message = fieldErrorConstant.NOT_BLANK)
         private List<Long> showSeatIds;
     }
 

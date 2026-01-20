@@ -103,16 +103,21 @@ public class TheatreServices {
     }
 
     public List<ShowSeatResponseDto> getAllSeats(Long theatreId, Long movieId, Long showId) {
-
         List<ShowSeat> showSeats = showSeatRepo.findByShow_Id(showId);
-        return showSeats.stream().map(showSeat -> {
-            ShowSeatResponseDto dto = new ShowSeatResponseDto();
-            dto.setId(showSeat.getId());
-            dto.setSeatNumber(showSeat.getSeat().getSeatNo());
-            dto.setRowNumber(showSeat.getSeat().getRowNo());
-            dto.setReserved(showSeat.isReserved());
-            dto.setPrice(showSeat.getShow().getPrice());
-            return  dto;
-        }).toList();
+
+        return showSeats.stream()
+                .filter(ss -> ss.getSeat() != null)
+                .map(showSeat -> {
+                    ShowSeatResponseDto dto = new ShowSeatResponseDto();
+                    dto.setId(showSeat.getId());
+                    dto.setSeatNumber(showSeat.getSeat().getSeatNo());
+                    dto.setRowNumber(showSeat.getSeat().getRowNo());
+                    dto.setReserved(showSeat.isReserved());
+
+                    double price = (showSeat.getShow() != null) ? showSeat.getShow().getPrice() : 0.0;
+                    dto.setPrice(price);
+
+                    return dto;
+                }).toList();
     }
 }
