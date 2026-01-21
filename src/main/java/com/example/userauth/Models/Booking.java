@@ -25,8 +25,9 @@ public class Booking extends BaseCreatedAndUpdatedAt{
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status" , nullable = false)
-    private EStatus eStatus;
+    private EStatus eStatus = EStatus.Pending;
 
 
     @OneToMany(mappedBy = "booking")
@@ -41,7 +42,7 @@ public class Booking extends BaseCreatedAndUpdatedAt{
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private EPayment paymentMethod;
+    private EPayment paymentMethod = EPayment.Credit_card;
 
     private LocalDateTime bookingTime;
 

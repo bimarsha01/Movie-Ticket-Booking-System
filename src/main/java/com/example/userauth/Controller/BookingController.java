@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/customer")
 @AllArgsConstructor
-public class BookingController {
+public class BookingController extends BaseController {
     private final BookingServices bookingServices;
 
 //    @PostMapping("/book")
@@ -29,5 +29,6 @@ public class BookingController {
     @PreAuthorize("hasAuthority('Role_User')")
     public ResponseEntity<ApiResponse> bookShow(@PathVariable Long showId , BookingCreationDto BookingCreationDto){
         BookingResponseDto bookingResponseDto = bookingServices.bookShow(showId , BookingCreationDto );
+        return ResponseEntity.ok(successResponse("BOOKING CONFIRMED" , true , bookingResponseDto));
     }
 }

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter @Setter
@@ -21,6 +22,6 @@ public class BookingResponseDto {
     private String movieTitle;
     private String theatreName;
     private String startTime;
-    private Set<String> seatNumbers;
+    private List<String> seatNumbers;
     private Double totalAmount;
 }

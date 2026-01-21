@@ -5,7 +5,9 @@ import com.example.userauth.DTOs.BookingDtos.BookingResponseDto;
 import com.example.userauth.ExceptionHandling.AlreadyExistException;
 import com.example.userauth.ExceptionHandling.NotFoundException;
 import com.example.userauth.ExceptionHandling.UnauthorizedException;
+import com.example.userauth.Mapper.BookingMapper;
 import com.example.userauth.Models.*;
+import com.example.userauth.Models.Enums.EPayment;
 import com.example.userauth.Models.Enums.EStatus;
 import com.example.userauth.Repo.*;
 import jakarta.transaction.Transactional;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class BookingServices {
     private final showSeatRepo showSeatRepo;
     private final UserRepo userRepo;
     private final bookingRepo bookingRepo;
+    private final BookingMapper bookingMapper;
 
 
     public BookingResponseDto bookShow(Long showId, BookingCreationDto bookingCreationDto) {
@@ -38,7 +42,7 @@ public class BookingServices {
 
         User user = userRepo.findByUsername(Username).orElseThrow(()-> new NotFoundException("NOT_FOUND" , "USER NOT FOUND"));
 
-        List<ShowSeat> seats = showSeatRepo.findAllById(bookingCreationDto.getShowSeatIds());
+        List<ShowSeat> seats = showSeatRepo.findAllByIdWithLock(bookingCreationDto.getShowSeatIds());
         List<String> rebooking = new ArrayList<>();
 
         for (ShowSeat showSeat : seats) {
@@ -77,7 +81,7 @@ public class BookingServices {
 
         bookingRepo.save(booking);
 
-        return
+        return bookingMapper.toDto(booking);
     }
 
 

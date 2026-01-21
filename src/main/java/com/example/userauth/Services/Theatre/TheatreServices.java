@@ -59,15 +59,12 @@ public class TheatreServices {
         log.info("Starting fix for " + allShows.size() + " shows.");
 
         for (Show show : allShows) {
-            // Find physical seats for the screen
             List<Seat> physicalSeats = seatRepo.findByScreen_Id(show.getScreens().getId());
 
             if (physicalSeats.isEmpty()) {
                 log.warn("SKIPPING Show " + show.getId() + " because Screen " + show.getScreens().getId() + " has NO physical seats!");
                 continue;
             }
-
-            // Check if show_seats already exist
             if (showSeatRepo.findByShow_Id(show.getId()).isEmpty()) {
                 log.info("Working on Show " + show.getId() + ". Found " + physicalSeats.size() + " physical seats.");
 

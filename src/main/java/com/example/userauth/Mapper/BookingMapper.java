@@ -1,10 +1,31 @@
 package com.example.userauth.Mapper;
 
+import com.example.userauth.DTOs.BookingDtos.BookingResponseDto;
+import com.example.userauth.Models.Booking;
+import com.example.userauth.Models.ShowSeat;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
-public class BookingMapper {
+import java.util.List;
+import java.util.Set;
 
-    @Mapping(target = "id" , ignore = true)
+@Mapper(componentModel = "spring")
+public interface BookingMapper {
+
+    @Mapping(target = "bookingId" , source = "id")
+    @Mapping(target = "movieTitle" , source = "show.movies.title")
+    @Mapping(target = "theatreName" , source = "show.theatre.name")
+    @Mapping(target = "status", source = "EStatus")
+    @Mapping(target = "paymentMethod" , source = "paymentMethod")
+    @Mapping(target = "seatNumbers" , expression = "java(mapSeats(booking.getSeats()))")
+    BookingResponseDto toDto(Booking booking);
+
+    default List<String> mapSeats(Set<ShowSeat> seats) {
+        if (seats == null) return null;
+        return seats.stream()
+                .map(s -> s.getSeat().getRowNo() + "" + s.getSeat().getSeatNo())
+                .toList();
+    }
 }
+
+
