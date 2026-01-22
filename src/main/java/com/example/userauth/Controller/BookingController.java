@@ -24,10 +24,10 @@ public class BookingController extends BaseController {
 //        BookingResponseDto bookingResponseDto = bookingServices.bookShow(bookingCreationDto);
 //        return null;
 //    }
-
+//
     @PostMapping("/booking/show/{showId}")
     @PreAuthorize("hasAuthority('Role_User')")
-    public ResponseEntity<ApiResponse> bookShow(@PathVariable Long showId , BookingCreationDto BookingCreationDto){
+    public ResponseEntity<ApiResponse> bookShow( @PathVariable Long showId ,@RequestBody BookingCreationDto BookingCreationDto){
         BookingResponseDto bookingResponseDto = bookingServices.bookShow(showId , BookingCreationDto );
         return ResponseEntity.ok(successResponse("BOOKING CONFIRMED" , true , bookingResponseDto));
     }

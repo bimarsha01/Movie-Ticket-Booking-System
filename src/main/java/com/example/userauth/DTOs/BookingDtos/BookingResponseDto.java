@@ -17,11 +17,11 @@ import java.util.Set;
 public class BookingResponseDto {
 
     private Long bookingId;
-    private String status;
-    private String paymentMethod;
     private String movieTitle;
     private String theatreName;
-    private String startTime;
+    private String status;
+    private String paymentMethod;
+    private String bookingTime;
     private List<String> seatNumbers;
-    private Double totalAmount;
+    private Double totalPrice;
 }

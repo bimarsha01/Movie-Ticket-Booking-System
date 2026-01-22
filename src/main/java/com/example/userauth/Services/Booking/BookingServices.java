@@ -37,18 +37,27 @@ public class BookingServices {
 
 
     public BookingResponseDto bookShow(Long showId, BookingCreationDto bookingCreationDto) {
+        log.info("show id is {}",showId);
 
         String Username = SecurityContextHolder.getContext().getAuthentication().getName();
-
+        log.info("username is {}" , Username);
         User user = userRepo.findByUsername(Username).orElseThrow(()-> new NotFoundException("NOT_FOUND" , "USER NOT FOUND"));
-
+        log.info("User is loaded {}",user);
+        log.info("Requesting IDs: {} of type {}",
+                bookingCreationDto.getShowSeatIds(),
+                bookingCreationDto.getShowSeatIds().getFirst().getClass().getSimpleName());
         List<ShowSeat> seats = showSeatRepo.findAllByIdWithLock(bookingCreationDto.getShowSeatIds());
+        log.info("The ids are {}",seats);
         List<String> rebooking = new ArrayList<>();
+        Show show = showRepo.findById(showId)
+                .orElseThrow(() -> new NotFoundException("SHOW_NOT_FOUND", "Show not found"));
 
         for (ShowSeat showSeat : seats) {
             Long actualShowId = showSeat.getShow().getId();
+           log.info("Actual show id is : {}",actualShowId);
 
             if (!actualShowId.equals(showId)) {
+                log.info("Error thrown");
                 throw new UnauthorizedException("UNAUTHORIZED", "You are trying to book the seats of different show");
             }
 
@@ -60,16 +69,17 @@ public class BookingServices {
             throw new RuntimeException("The following seats were just taken: " + String.join(", ", rebooking));
         }
 
-
-
-
-
         Booking booking = new Booking();
+        booking.setShow(show);
         booking.setUser(user);
         booking.setBookingTime(LocalDateTime.now());
-        double price = seats.size() * seats.getFirst().getShow().getPrice();
-        booking.setTotalPrice(price);
+        double totalPrice = seats.stream()
+                .filter(seat -> seat != null && seat.getShow() != null)
+                .mapToDouble(seat -> seat.getShow().getPrice())
+                .sum();
+        booking.setTotalPrice(totalPrice);
         booking.setEStatus(EStatus.Successful);
+        booking.setPaymentMethod(EPayment.Credit_card);
 
 
         for (ShowSeat showSeat : seats) {
