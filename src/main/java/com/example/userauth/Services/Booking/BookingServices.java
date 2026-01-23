@@ -2,6 +2,7 @@ package com.example.userauth.Services.Booking;
 
 import com.example.userauth.DTOs.BookingDtos.BookingCreationDto;
 import com.example.userauth.DTOs.BookingDtos.BookingResponseDto;
+import com.example.userauth.DTOs.PaymentDetailsDto;
 import com.example.userauth.ExceptionHandling.AlreadyExistException;
 import com.example.userauth.ExceptionHandling.NotFoundException;
 import com.example.userauth.ExceptionHandling.UnauthorizedException;
@@ -34,6 +35,7 @@ public class BookingServices {
     private final UserRepo userRepo;
     private final bookingRepo bookingRepo;
     private final BookingMapper bookingMapper;
+    private final seatRepo seatRepo;
 
 
     public BookingResponseDto bookShow(Long showId, BookingCreationDto bookingCreationDto) {
@@ -78,8 +80,7 @@ public class BookingServices {
                 .mapToDouble(seat -> seat.getShow().getPrice())
                 .sum();
         booking.setTotalPrice(totalPrice);
-        booking.setEStatus(EStatus.Successful);
-        booking.setPaymentMethod(EPayment.Credit_card);
+        booking.setEStatus(EStatus.Pending);
 
 
         for (ShowSeat showSeat : seats) {
@@ -95,5 +96,30 @@ public class BookingServices {
     }
 
 
+    public BookingResponseDto finalizeBooking(Long bookingId, PaymentDetailsDto paymentDetailsDto) {
+
+        Booking booking = bookingRepo.findById(bookingId).orElseThrow(()-> new NotFoundException("NOT_FOUND" , "Booking id not found"));
+
+ List<Seat> seatIds =
+
+       if(paymentDetailsDto.getPrice().equals(booking.getTotalPrice())){
+           booking.setPaymentMethod(paymentDetailsDto.getPaymentMethod());
+           booking.setEStatus(EStatus.Successful);
+
+           WebSocketUpdate message = new WebSocketUpdate("BOOKED", seatIds);
+           messagingTemplate.convertAndSend("/topic/show/" + booking.getShow().getId(), message);
+        }
+       else{
+           booking.setEStatus(EStatus.Expired);
+           List<ShowSeat> seats = showSeatRepo.findByBooking_Id(bookingId);
+           for(ShowSeat showSeat : seats){
+               showSeat.setReserved(false);
+               showSeat.setBooking(null);
+           }
+           showSeatRepo.saveAll(seats);
+           throw new RuntimeException("Payment failed: Incorrect amount provided.");
+       }
+        return bookingMapper.toDto(bookingRepo.save(booking));
+    }
 }
 

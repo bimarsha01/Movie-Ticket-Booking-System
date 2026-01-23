@@ -1,6 +1,7 @@
 package com.example.userauth.Repo;
 
 import com.example.userauth.Models.Movies;
+import com.example.userauth.Models.Seat;
 import com.example.userauth.Models.Show;
 import com.example.userauth.Models.ShowSeat;
 import jakarta.persistence.LockModeType;
@@ -19,4 +20,6 @@ public interface showSeatRepo  extends JpaRepository<ShowSeat, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select ss from ShowSeat ss where ss.id in :ids")
     List<ShowSeat> findAllByIdWithLock(@Param("ids") List<Long> ids);
+
+    List<ShowSeat> findByBooking_Id(Long bookingId);
 }

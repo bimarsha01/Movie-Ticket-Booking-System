@@ -3,6 +3,7 @@ package com.example.userauth.Controller;
 import com.example.userauth.API.ApiResponse;
 import com.example.userauth.DTOs.BookingDtos.BookingCreationDto;
 import com.example.userauth.DTOs.BookingDtos.BookingResponseDto;
+import com.example.userauth.DTOs.PaymentDetailsDto;
 import com.example.userauth.Services.Booking.BookingServices;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,5 +31,11 @@ public class BookingController extends BaseController {
     public ResponseEntity<ApiResponse> bookShow( @PathVariable Long showId ,@RequestBody BookingCreationDto BookingCreationDto){
         BookingResponseDto bookingResponseDto = bookingServices.bookShow(showId , BookingCreationDto );
         return ResponseEntity.ok(successResponse("BOOKING CONFIRMED" , true , bookingResponseDto));
+    }
+    @PostMapping("/finalize/booking/{bookingId}")
+    @PreAuthorize("hasAuthority('Role_User')")
+    public  ResponseEntity<ApiResponse> finalizeBooking(@PathVariable Long bookingId , PaymentDetailsDto paymentDetailsDto){
+       BookingResponseDto bookingResponseDto =  bookingServices.finalizeBooking(bookingId, paymentDetailsDto);
+       return ResponseEntity.ok(successResponse("Successfully Booked" , true , bookingResponseDto));
     }
 }
