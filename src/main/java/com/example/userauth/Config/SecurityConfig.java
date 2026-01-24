@@ -42,6 +42,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/customer/signup/**").permitAll()
+                        .requestMatchers("/ws-booking/**").permitAll()
                         .requestMatchers("/customer/signin/**").permitAll()
                         .requestMatchers("/admin/**").authenticated()
                         .anyRequest().authenticated()
