@@ -18,14 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class BookingController extends BaseController {
     private final BookingServices bookingServices;
 
-//    @PostMapping("/book")
-//    @PreAuthorize("hasAuthority('Role_User')")
-//
-//    public ResponseEntity<ApiResponse> bookShow(@RequestBody BookingCreationDto bookingCreationDto){
-//        BookingResponseDto bookingResponseDto = bookingServices.bookShow(bookingCreationDto);
-//        return null;
-//    }
-//
     @PostMapping("/booking/show/{showId}")
     @PreAuthorize("hasAuthority('Role_User')")
     public ResponseEntity<ApiResponse> bookShow( @PathVariable Long showId ,@RequestBody BookingCreationDto BookingCreationDto){
@@ -34,7 +26,7 @@ public class BookingController extends BaseController {
     }
     @PostMapping("/finalize/booking/{bookingId}")
     @PreAuthorize("hasAuthority('Role_User')")
-    public  ResponseEntity<ApiResponse> finalizeBooking(@PathVariable Long bookingId , PaymentDetailsDto paymentDetailsDto){
+    public  ResponseEntity<ApiResponse> finalizeBooking(@PathVariable Long bookingId ,@RequestBody PaymentDetailsDto paymentDetailsDto){
        BookingResponseDto bookingResponseDto =  bookingServices.finalizeBooking(bookingId, paymentDetailsDto);
        return ResponseEntity.ok(successResponse("Successfully Booked" , true , bookingResponseDto));
     }

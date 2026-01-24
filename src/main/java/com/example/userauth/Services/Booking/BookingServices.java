@@ -3,12 +3,11 @@ package com.example.userauth.Services.Booking;
 import com.example.userauth.DTOs.BookingDtos.BookingCreationDto;
 import com.example.userauth.DTOs.BookingDtos.BookingResponseDto;
 import com.example.userauth.DTOs.PaymentDetailsDto;
-import com.example.userauth.ExceptionHandling.AlreadyExistException;
+import com.example.userauth.DTOs.WebSocketUpdate;
 import com.example.userauth.ExceptionHandling.NotFoundException;
 import com.example.userauth.ExceptionHandling.UnauthorizedException;
 import com.example.userauth.Mapper.BookingMapper;
 import com.example.userauth.Models.*;
-import com.example.userauth.Models.Enums.EPayment;
 import com.example.userauth.Models.Enums.EStatus;
 import com.example.userauth.Repo.*;
 import jakarta.transaction.Transactional;
@@ -16,12 +15,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Transactional
 @Slf4j
@@ -30,12 +30,12 @@ import java.util.Optional;
 public class BookingServices {
 
     private final showRepo showRepo;
-    private final screensRepo screensRepo;
     private final showSeatRepo showSeatRepo;
     private final UserRepo userRepo;
     private final bookingRepo bookingRepo;
     private final BookingMapper bookingMapper;
-    private final seatRepo seatRepo;
+    private final SimpMessagingTemplate messagingTemplate;
+
 
 
     public BookingResponseDto bookShow(Long showId, BookingCreationDto bookingCreationDto) {
@@ -48,7 +48,7 @@ public class BookingServices {
         log.info("Requesting IDs: {} of type {}",
                 bookingCreationDto.getShowSeatIds(),
                 bookingCreationDto.getShowSeatIds().getFirst().getClass().getSimpleName());
-        List<ShowSeat> seats = showSeatRepo.findAllByIdWithLock(bookingCreationDto.getShowSeatIds());
+        Set<ShowSeat> seats = showSeatRepo.findAllByIdWithLock(bookingCreationDto.getShowSeatIds());
         log.info("The ids are {}",seats);
         List<String> rebooking = new ArrayList<>();
         Show show = showRepo.findById(showId)
@@ -83,11 +83,25 @@ public class BookingServices {
         booking.setEStatus(EStatus.Pending);
 
 
+
+
         for (ShowSeat showSeat : seats) {
             showSeat.setReserved(true);
             showSeat.setBooking(booking);
         }
 
+        List<String> ids = seats.stream().map(showSeat -> {
+
+            int rowNo = showSeat.getSeat().getRowNo();
+            int seatNo = showSeat.getSeat().getSeatNo();
+
+            char rowLetter = (char) (64 + rowNo);
+            return rowLetter + String.format("%02d", seatNo);
+                }).toList();
+
+        WebSocketUpdate message = new WebSocketUpdate("PENDING", ids);
+        messagingTemplate.convertAndSend("/topic/show/" + booking.getShow().getId(), message);
+        booking.setSeats(seats);
         showSeatRepo.saveAll(seats);
 
         bookingRepo.save(booking);
@@ -100,13 +114,22 @@ public class BookingServices {
 
         Booking booking = bookingRepo.findById(bookingId).orElseThrow(()-> new NotFoundException("NOT_FOUND" , "Booking id not found"));
 
- List<Seat> seatIds =
+ List<ShowSeat> seatIds = showSeatRepo.findByBooking_Id(booking.getId());
+
+        List<String> ids = seatIds.stream().map(showSeat -> {
+
+            int rowNo = showSeat.getSeat().getRowNo();
+            int seatNo = showSeat.getSeat().getSeatNo();
+
+            char rowLetter = (char) (64 + rowNo);
+            return rowLetter + String.format("%02d", seatNo);
+        }).toList();
 
        if(paymentDetailsDto.getPrice().equals(booking.getTotalPrice())){
            booking.setPaymentMethod(paymentDetailsDto.getPaymentMethod());
            booking.setEStatus(EStatus.Successful);
 
-           WebSocketUpdate message = new WebSocketUpdate("BOOKED", seatIds);
+           WebSocketUpdate message = new WebSocketUpdate("BOOKED", ids);
            messagingTemplate.convertAndSend("/topic/show/" + booking.getShow().getId(), message);
         }
        else{
@@ -117,6 +140,10 @@ public class BookingServices {
                showSeat.setBooking(null);
            }
            showSeatRepo.saveAll(seats);
+
+           WebSocketUpdate message = new WebSocketUpdate("EXPIRED", ids);
+           messagingTemplate.convertAndSend("/topic/show/" + booking.getShow().getId(), message);
+
            throw new RuntimeException("Payment failed: Incorrect amount provided.");
        }
         return bookingMapper.toDto(bookingRepo.save(booking));

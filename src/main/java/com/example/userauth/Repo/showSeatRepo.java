@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface showSeatRepo  extends JpaRepository<ShowSeat, Long> {
@@ -19,7 +20,7 @@ public interface showSeatRepo  extends JpaRepository<ShowSeat, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select ss from ShowSeat ss where ss.id in :ids")
-    List<ShowSeat> findAllByIdWithLock(@Param("ids") List<Long> ids);
+    Set<ShowSeat> findAllByIdWithLock(@Param("ids") List<Long> ids);
 
     List<ShowSeat> findByBooking_Id(Long bookingId);
 }

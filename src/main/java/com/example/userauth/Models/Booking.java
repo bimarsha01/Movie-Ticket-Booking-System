@@ -27,7 +27,7 @@ public class Booking extends BaseCreatedAndUpdatedAt{
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status" , nullable = false)
-    private EStatus eStatus = EStatus.Pending;
+    private EStatus eStatus ;
 
 
     @OneToMany(mappedBy = "booking")

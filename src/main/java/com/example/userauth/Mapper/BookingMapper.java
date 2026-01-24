@@ -16,16 +16,22 @@ public interface BookingMapper {
     @Mapping(target = "movieTitle" , source = "show.movies.title")
     @Mapping(target = "theatreName" , source = "show.theatre.name")
     @Mapping(target = "status", source = "EStatus")
-    @Mapping(target = "paymentMethod" , source = "paymentMethod")
     @Mapping(target = "seatNumbers" , expression = "java(mapSeats(booking.getSeats()))")
     BookingResponseDto toDto(Booking booking);
 
     default List<String> mapSeats(Set<ShowSeat> seats) {
         if (seats == null) return null;
+
         return seats.stream()
-                .map(s -> s.getSeat().getRowNo() + "" + s.getSeat().getSeatNo())
-                .toList();
+                .map(showSeat -> {
+                    int rowNo = showSeat.getSeat().getRowNo();
+                    int seatNo = showSeat.getSeat().getSeatNo();
+
+                    char rowLetter = (char) (64 + rowNo);
+                    return rowLetter + String.format("%02d", seatNo);
+                }).toList();
     }
+
 }
 
 

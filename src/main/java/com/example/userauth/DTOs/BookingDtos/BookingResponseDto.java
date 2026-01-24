@@ -20,7 +20,6 @@ public class BookingResponseDto {
     private String movieTitle;
     private String theatreName;
     private String status;
-    private String paymentMethod;
     private String bookingTime;
     private List<String> seatNumbers;
     private Double totalPrice;
