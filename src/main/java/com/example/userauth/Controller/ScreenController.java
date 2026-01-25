@@ -27,6 +27,8 @@ public class ScreenController extends BaseController {
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('Role_Theatre_Admin')")
     public ResponseEntity<ApiResponse> addScreen(@RequestBody ScreenCreationDto screenCreationDto){
+
+        log.info("checkin the role and then creating the theatre for hthe given user");
         ScreenResponseDto screenResponseDto = screenServices.addScreen(screenCreationDto);
 
         if(screenResponseDto == null){
@@ -38,6 +40,7 @@ public class ScreenController extends BaseController {
     @PostMapping("/getScreen")
     @PreAuthorize("hasAuthority('Role_Theatre_Admin')")
     public ResponseEntity<ApiResponse> getAllScreens(){
+        log.info("get all the screem from the db for that particular person");
         List<ScreenResponseDto> screenResponseDtos = screenServices.getAllScreens();
 
         return ResponseEntity.ok(successResponse("Screen fetching successfully" , true , screenResponseDtos));

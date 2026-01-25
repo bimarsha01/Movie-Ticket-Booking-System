@@ -27,6 +27,7 @@ public class MovieController extends BaseController{
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('Role_Admin')")
     public ResponseEntity<ApiResponse> addMovies(@RequestBody List<MovieCreationDto> dto){
+        log.info("Adding the movie in the db");
         List<MovieResponseDto> movieResponseDto = movieServices.addMovies(dto);
         if(movieResponseDto == null){
             return ResponseEntity.ok(failureResponse("Adding mocies into db failed " , false , null));

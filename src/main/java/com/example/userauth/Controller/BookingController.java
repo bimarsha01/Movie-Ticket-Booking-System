@@ -21,12 +21,14 @@ public class BookingController extends BaseController {
     @PostMapping("/booking/show/{showId}")
     @PreAuthorize("hasAuthority('Role_User')")
     public ResponseEntity<ApiResponse> bookShow( @PathVariable Long showId ,@RequestBody BookingCreationDto BookingCreationDto){
+    log.info("checking the booking shows " );
         BookingResponseDto bookingResponseDto = bookingServices.bookShow(showId , BookingCreationDto );
         return ResponseEntity.ok(successResponse("BOOKING CONFIRMED" , true , bookingResponseDto));
     }
     @PostMapping("/finalize/booking/{bookingId}")
     @PreAuthorize("hasAuthority('Role_User')")
     public  ResponseEntity<ApiResponse> finalizeBooking(@PathVariable Long bookingId ,@RequestBody PaymentDetailsDto paymentDetailsDto){
+        log.info("finalize the booking with the ip address and also directed to simple payment methid");
        BookingResponseDto bookingResponseDto =  bookingServices.finalizeBooking(bookingId, paymentDetailsDto);
        return ResponseEntity.ok(successResponse("Successfully Booked" , true , bookingResponseDto));
     }
