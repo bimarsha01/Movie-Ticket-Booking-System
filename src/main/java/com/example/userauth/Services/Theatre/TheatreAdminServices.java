@@ -44,6 +44,7 @@ public class TheatreAdminServices {
     }
 
     public List<TheatreResponseDto> getAllTheatres() {
+        log.info("getting all the theatres");
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         List<Theatre> theatresByUserUsername = theatreRepo.getTheatresByUser_Username(username);
         return theatreMapper.toDtoList(theatresByUserUsername);

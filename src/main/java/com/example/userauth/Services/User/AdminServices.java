@@ -74,6 +74,7 @@ public class AdminServices {
     }
 
     public List<AdminRequestDto> pendingTheatreRequest() {
+        log.info("getting all the pending theatre request done by the admin");
 
         List<AdminRequestForTheatre> adminRequestForTheatre = adminRequestRepo.findByStatus(EStatus.Pending);
 
@@ -83,6 +84,7 @@ public class AdminServices {
 
 
     public AdminRequestDto approveRequest(Long Id) {
+        log.info("aproove the request sent by the user admin");
 
         AdminRequestForTheatre adminRequestForTheatre = adminRequestRepo.findById(Id).orElseThrow(()->new NotFoundException("NOT_FOUND" , "THE ID" + Id + " is not in the DB"));
 
@@ -94,6 +96,7 @@ public class AdminServices {
         newRoles.add(theatreRole);
 
         User user = adminRequestForTheatre.getUser();
+        log.info("setting up the new roles");
         user.setRoles(newRoles);
         userRepo.save(user);
         log.info("this is the role " + user.getRoles());

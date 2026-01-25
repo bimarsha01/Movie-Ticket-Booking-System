@@ -30,6 +30,7 @@ public class CheckBookingServices {
     @Transactional
     public void checkBooking() {
 
+        log.info("get the current time and then comparing with the final so that it could be known which is final");
         LocalDateTime time = LocalDateTime.now().minusMinutes(5);
 
         List<Booking> expiredBookings = bookingRepo.findAllByeStatusAndBookingTimeBefore(EStatus.Pending, time);
