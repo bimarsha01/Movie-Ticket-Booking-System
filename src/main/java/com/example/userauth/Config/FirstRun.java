@@ -42,7 +42,7 @@ public class FirstRun implements CommandLineRunner {
             log.info("creating a admin if it does not exist");
 
             Roles adminRole = rolesRepo.findByrole(ERole.Role_Admin)
-                    .orElseThrow(()->new NotFoundException("NOT,FOUND" , "ADMIN NOT FOUND"));
+                    .orElseThrow(()->new NotFoundException("NOT,FOUND" , "ADMIN ROLE NOT FOUND"));
 
             admin.setRoles(Set.of(adminRole));
             userRepo.save(admin);

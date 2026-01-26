@@ -30,13 +30,13 @@ public class JwtService {
 
     public String generateJwtToken(Authentication authentication){
         log.info("this is generating the token");
-        userDetailsImpl userprincipal = (userDetailsImpl) authentication.getPrincipal();
+        userDetailsImpl userPrincipal = (userDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder()
-                .setSubject(userprincipal.getUsername())
+                .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpiration))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS512) // Correct
+                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
