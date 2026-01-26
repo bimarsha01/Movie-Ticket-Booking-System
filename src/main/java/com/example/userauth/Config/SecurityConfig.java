@@ -35,7 +35,6 @@ public class SecurityConfig {
 
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
 
-                // 3. Set Session to STATELESS (This is standard for JWT projects)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

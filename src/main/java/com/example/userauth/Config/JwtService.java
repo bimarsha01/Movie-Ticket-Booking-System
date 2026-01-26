@@ -57,7 +57,7 @@ public class JwtService {
     public String getUserNameFromJwtToken(String token) {
         log.info("getting the username from the jwt token");
         return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey()) // Use the Key object here too!
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()

@@ -52,9 +52,9 @@ public class TheatreController extends BaseController{
         return ResponseEntity.ok(successResponse("Movies for the theatre " + theatreId , true , showResponseDto));
     }
 
-    @GetMapping("/show-all-theatres/{theatreId}/{movieId}/{showId}/shows")
+    @GetMapping("/show-all-theatres/{theatreId}/{movieId}/{showId}/seats")
     @PreAuthorize("hasAuthority('Role_User')")
-    public ResponseEntity<ApiResponse> getShowdetailsAndSeatDetails(@PathVariable Long theatreId , @PathVariable Long movieId , @PathVariable Long showId){
+    public ResponseEntity<ApiResponse> getShowDetailsAndSeatDetails(@PathVariable Long theatreId , @PathVariable Long movieId , @PathVariable Long showId){
         List<ShowSeatResponseDto> showSeatResponseDto = theatreServices.getAllSeats(theatreId , movieId , showId);
         return ResponseEntity.ok(successResponse("Seats for show with id :" + showId , true , showSeatResponseDto));
     }
