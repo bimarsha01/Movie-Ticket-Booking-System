@@ -24,10 +24,9 @@ public class userDetailsImpl implements UserDetails {
     private String username;
     private String email;
 
-    @JsonIgnore // We don't want the password to ever be sent in a JSON response
+    @JsonIgnore
     private String password;
 
-    // These are the roles converted into a format Spring understands
     private Collection<? extends GrantedAuthority> authorities;
 
     public userDetailsImpl(Long id, String username, String email, String password,
@@ -38,8 +37,6 @@ public class userDetailsImpl implements UserDetails {
         this.password = password;
         this.authorities = authorities;
     }
-
-    // This static method converts your DB User into a UserDetailsImpl object
     public static userDetailsImpl build(User user) {
         log.info("inside the userimpl allright");
         List<GrantedAuthority> authorities = user.getRoles().stream()
@@ -78,6 +75,5 @@ public class userDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() { return true; }
 
-    // Custom getter so you can access the ID in your sign-in logic
     public Long getId() { return id; }
 }
