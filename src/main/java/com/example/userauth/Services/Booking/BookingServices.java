@@ -29,10 +29,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class BookingServices {
 
-    private final showRepo showRepo;
-    private final showSeatRepo showSeatRepo;
+    private final ShowRepo showRepo;
+    private final ShowSeatRepo showSeatRepo;
     private final UserRepo userRepo;
-    private final bookingRepo bookingRepo;
+    private final BookingRepo bookingRepo;
     private final BookingMapper bookingMapper;
     private final SimpMessagingTemplate messagingTemplate;
 
@@ -147,6 +147,12 @@ public class BookingServices {
            throw new RuntimeException("Payment failed: Incorrect amount provided.");
        }
         return bookingMapper.toDto(bookingRepo.save(booking));
+    }
+
+    public BookingResponseDto getBookingById(Long bookingId) {
+        Booking booking = bookingRepo.findById(bookingId).orElseThrow(()->new NotFoundException("NOT_FOUND" , "Booking id not found"));
+
+        return bookingMapper.toDto(booking);
     }
 }
 

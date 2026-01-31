@@ -6,32 +6,27 @@ import com.example.userauth.ExceptionHandling.NotFoundException;
 import com.example.userauth.Mapper.ScreenMapper;
 import com.example.userauth.Models.Screens;
 import com.example.userauth.Models.Theatre;
-import com.example.userauth.Models.User;
 import com.example.userauth.Repo.UserRepo;
-import com.example.userauth.Repo.screensRepo;
-import com.example.userauth.Repo.theatreRepo;
+import com.example.userauth.Repo.ScreensRepo;
+import com.example.userauth.Repo.TheatreRepo;
 import jakarta.transaction.Transactional;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.example.userauth.Services.Theatre.TheatreServices;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ScreenServices {
-    private final screensRepo screensRepo;
+    private final ScreensRepo screensRepo;
     private final UserRepo userRepo;
-    private final theatreRepo theatreRepo;
+    private final TheatreRepo theatreRepo;
     private final ScreenMapper screenMapper;
     private final TheatreServices theatreServices;
 

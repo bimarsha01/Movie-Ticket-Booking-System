@@ -6,7 +6,6 @@ import com.example.userauth.DTOs.UserDtos.SigninDto;
 import com.example.userauth.DTOs.UserDtos.UserCreationDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
 import com.example.userauth.ExceptionHandling.InvalidCredentialsException;
-import com.example.userauth.ExceptionHandling.NotAvailableException;
 import com.example.userauth.ExceptionHandling.NotFoundException;
 import com.example.userauth.Mapper.userMapper;
 import com.example.userauth.Models.AdminRequestForTheatre;
@@ -16,33 +15,24 @@ import com.example.userauth.Models.Roles;
 import com.example.userauth.Models.User;
 import com.example.userauth.Repo.AdminRequestRepo;
 import com.example.userauth.Repo.UserRepo;
-import com.example.userauth.Repo.rolesRepo;
+import com.example.userauth.Repo.RolesRepo;
 import com.sun.jdi.request.DuplicateRequestException;
-import io.jsonwebtoken.Jwt;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.juli.logging.Log;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.example.userauth.Helpers.userDetailsImpl;
+import com.example.userauth.Helpers.UserDetailsImpl;
 import com.example.userauth.DTOs.Others.jwtResponse;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -52,7 +42,7 @@ public class userService {
 
     private final userMapper userMapper;
     private final UserRepo userRepo;
-    private final rolesRepo rolesRepo;
+    private final RolesRepo rolesRepo;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticate;
     private final AuthenticationManager authenticationManager;
@@ -102,7 +92,7 @@ public class userService {
 
         try {
             log.info("S5: before getPrincipal");
-            userDetailsImpl userDetails = (userDetailsImpl) authentication.getPrincipal();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             log.info("S6: after getPrincipal");
 
             log.info("S7: before roles stream");

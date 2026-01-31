@@ -2,7 +2,7 @@ package com.example.userauth.Config;
 
 import com.example.userauth.Models.Enums.ERole;
 import com.example.userauth.Models.Roles;
-import com.example.userauth.Repo.rolesRepo;
+import com.example.userauth.Repo.RolesRepo;
 import com.example.userauth.Services.User.userService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RoleDataLoader implements CommandLineRunner {
 
-    private final rolesRepo rolesRepo;
+    private final RolesRepo rolesRepo;
     private final userService userService;
 
     @Override

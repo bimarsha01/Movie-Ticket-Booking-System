@@ -13,18 +13,14 @@ import com.example.userauth.Models.Roles;
 import com.example.userauth.Models.User;
 import com.example.userauth.Repo.AdminRequestRepo;
 import com.example.userauth.Repo.UserRepo;
-import com.example.userauth.Repo.rolesRepo;
+import com.example.userauth.Repo.RolesRepo;
 import jakarta.transaction.Transactional;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.embedded.netty.NettyWebServer;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Transactional
@@ -36,7 +32,7 @@ public class AdminServices {
 
     private final UserRepo userRepo;
     private final userMapper userMapper;
-    private final rolesRepo rolesRepo;
+    private final RolesRepo rolesRepo;
     private final AdminRequestRepo adminRequestRepo;
     private final AdminRequestMapper adminRequestMapper;
 

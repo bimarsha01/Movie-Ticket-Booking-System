@@ -32,4 +32,13 @@ public class BookingController extends BaseController {
        BookingResponseDto bookingResponseDto =  bookingServices.finalizeBooking(bookingId, paymentDetailsDto);
        return ResponseEntity.ok(successResponse("Successfully Booked" , true , bookingResponseDto));
     }
+
+    @PostMapping("/booking/getBookingById")
+    @PreAuthorize("hasAuthority('Role_Admin')")
+    public ResponseEntity<ApiResponse> getBookingById(@RequestBody Long bookingId){
+        log.info("Getting the Booking object with the help of Id");
+        BookingResponseDto bookingResponseDto = bookingServices.getBookingById(bookingId);
+
+        return ResponseEntity.ok(successResponse("Succesfully fetched the user with the given id" , true , bookingResponseDto));
+    }
 }

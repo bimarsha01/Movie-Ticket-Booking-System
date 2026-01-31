@@ -9,11 +9,10 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import com.example.userauth.Helpers.userDetailsImpl;
+import com.example.userauth.Helpers.UserDetailsImpl;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.security.PrivateKey;
 import java.util.Date;
 @Slf4j
 @Getter
@@ -30,7 +29,7 @@ public class JwtService {
 
     public String generateJwtToken(Authentication authentication){
         log.info("this is generating the token");
-        userDetailsImpl userPrincipal = (userDetailsImpl) authentication.getPrincipal();
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())

@@ -1,12 +1,9 @@
 package com.example.userauth.Services.Theatre;
 
-import com.example.userauth.DTOs.MovieDtos.MovieResponseDto;
-import com.example.userauth.DTOs.SeatDtos.SeatResponseDto;
 import com.example.userauth.DTOs.ShowDtos.ShowResponseDto;
 import com.example.userauth.DTOs.ShowSeat.ShowSeatResponseDto;
 import com.example.userauth.DTOs.TheatreDtos.TheatreResponseDto;
 import com.example.userauth.Helpers.MovieMinInfo;
-import com.example.userauth.Mapper.MovieMapper;
 import com.example.userauth.Mapper.ShowMapper;
 import com.example.userauth.Mapper.TheatreMapper;
 import com.example.userauth.Models.*;
@@ -16,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -24,13 +20,13 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class TheatreServices {
-    private final theatreRepo theatreRepo;
+    private final TheatreRepo theatreRepo;
     private final TheatreMapper theatreMapper;
-    private final showRepo showRepo;
+    private final ShowRepo showRepo;
     private final ShowMapper showMapper;
-    private final seatRepo seatRepo;
-    private final showSeatRepo showSeatRepo;
-    private final screensRepo screensRepo;
+    private final SeatRepo seatRepo;
+    private final ShowSeatRepo showSeatRepo;
+    private final ScreensRepo screensRepo;
 
 
     public List<TheatreResponseDto> showAllTheatre() {

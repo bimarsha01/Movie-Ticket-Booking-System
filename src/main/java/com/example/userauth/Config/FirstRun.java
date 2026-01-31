@@ -5,7 +5,7 @@ import com.example.userauth.Models.Enums.ERole;
 import com.example.userauth.Models.Roles;
 import com.example.userauth.Models.User;
 import com.example.userauth.Repo.UserRepo;
-import com.example.userauth.Repo.rolesRepo;
+import com.example.userauth.Repo.RolesRepo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -18,7 +18,7 @@ import java.util.Set;
 @Component
 @AllArgsConstructor
 public class FirstRun implements CommandLineRunner {
-    private final rolesRepo rolesRepo;
+    private final RolesRepo rolesRepo;
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
 

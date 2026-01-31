@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface bookingRepo  extends JpaRepository<Booking, Long> {
+public interface BookingRepo extends JpaRepository<Booking, Long> {
     List<Booking> findAllByeStatusAndBookingTimeBefore(EStatus eStatus, LocalDateTime time);
 
 }

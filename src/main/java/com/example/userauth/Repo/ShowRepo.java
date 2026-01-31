@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface showRepo extends JpaRepository<Show , Long> {
+public interface ShowRepo extends JpaRepository<Show , Long> {
 
     List<Show> findAllByEndTimeAfter(LocalDateTime now);
 

@@ -4,8 +4,8 @@ import com.example.userauth.DTOs.WebSocketUpdate;
 import com.example.userauth.Models.Booking;
 import com.example.userauth.Models.Enums.EStatus;
 import com.example.userauth.Models.ShowSeat;
-import com.example.userauth.Repo.bookingRepo;
-import com.example.userauth.Repo.showSeatRepo;
+import com.example.userauth.Repo.BookingRepo;
+import com.example.userauth.Repo.ShowSeatRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CheckBookingServices {
 
-    private final bookingRepo bookingRepo;
-    private final showSeatRepo showSeatRepo;
+    private final BookingRepo bookingRepo;
+    private final ShowSeatRepo showSeatRepo;
     private final SimpMessagingTemplate messagingTemplate;
 
 

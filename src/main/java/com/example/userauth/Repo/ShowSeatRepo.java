@@ -1,8 +1,5 @@
 package com.example.userauth.Repo;
 
-import com.example.userauth.Models.Movies;
-import com.example.userauth.Models.Seat;
-import com.example.userauth.Models.Show;
 import com.example.userauth.Models.ShowSeat;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public interface showSeatRepo  extends JpaRepository<ShowSeat, Long> {
+public interface ShowSeatRepo extends JpaRepository<ShowSeat, Long> {
     List<ShowSeat> findByShow_Id(Long showId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)

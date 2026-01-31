@@ -5,7 +5,7 @@ import com.example.userauth.DTOs.MovieDtos.MovieResponseDto;
 import com.example.userauth.ExceptionHandling.AlreadyExistException;
 import com.example.userauth.Mapper.MovieMapper;
 import com.example.userauth.Models.Movies;
-import com.example.userauth.Repo.moviesRepo;
+import com.example.userauth.Repo.MoviesRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.List;
 public class MovieServices {
 
     private final MovieMapper movieMapper;
-    private final moviesRepo moviesRepo;
+    private final MoviesRepo moviesRepo;
 
     @Transactional
     public List<MovieResponseDto> addMovies(List<MovieCreationDto> dtos) {

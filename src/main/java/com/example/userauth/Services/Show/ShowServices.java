@@ -13,13 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Service
@@ -27,13 +24,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ShowServices {
     private final UserRepo userRepo;
-    private final theatreRepo theatreRepo;
-    private final screensRepo screensRepo;
-    private final moviesRepo moviesRepo;
+    private final TheatreRepo theatreRepo;
+    private final ScreensRepo screensRepo;
+    private final MoviesRepo moviesRepo;
     private final ShowMapper showMapper;
-    private final showRepo showRepo;
-    private final seatRepo seatRepo;
-    private final showSeatRepo showSeatRepo;
+    private final ShowRepo showRepo;
+    private final SeatRepo seatRepo;
+    private final ShowSeatRepo showSeatRepo;
 
     public List<ShowResponseDto> addShows(List<ShowCreationDto> showCreationDto) {
         log.info("Show being checked");

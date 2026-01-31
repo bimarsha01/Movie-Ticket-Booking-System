@@ -4,7 +4,6 @@ import com.example.userauth.Models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class userDetailsImpl implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
     private Long id;
     private String username;
     private String email;
@@ -29,7 +28,7 @@ public class userDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public userDetailsImpl(Long id, String username, String email, String password,
+    public UserDetailsImpl(Long id, String username, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
@@ -37,13 +36,13 @@ public class userDetailsImpl implements UserDetails {
         this.password = password;
         this.authorities = authorities;
     }
-    public static userDetailsImpl build(User user) {
+    public static UserDetailsImpl build(User user) {
         log.info("inside the userimpl allright");
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRole().name()))
                 .collect(Collectors.toList());
 
-        return new userDetailsImpl(
+        return new UserDetailsImpl(
                 user.getUserId(),
                 user.getUsername(),
                 user.getEmail(),

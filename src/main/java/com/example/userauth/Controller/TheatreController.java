@@ -1,12 +1,11 @@
 package com.example.userauth.Controller;
 
 import com.example.userauth.API.ApiResponse;
-import com.example.userauth.DTOs.SeatDtos.SeatResponseDto;
 import com.example.userauth.DTOs.ShowDtos.ShowResponseDto;
 import com.example.userauth.DTOs.ShowSeat.ShowSeatResponseDto;
 import com.example.userauth.DTOs.TheatreDtos.TheatreResponseDto;
 import com.example.userauth.Helpers.MovieMinInfo;
-import com.example.userauth.Repo.showSeatRepo;
+import com.example.userauth.Repo.ShowSeatRepo;
 import com.example.userauth.Services.Theatre.TheatreServices;
 import com.example.userauth.Services.User.AdminServices;
 import lombok.AllArgsConstructor;
@@ -24,7 +23,7 @@ import java.util.List;
 public class TheatreController extends BaseController{
 
     private final TheatreServices theatreServices;
-    private final showSeatRepo showSeatRepo;
+    private final ShowSeatRepo showSeatRepo;
     private final AdminServices adminServices;
 
     @GetMapping("/show-all-theatres")
