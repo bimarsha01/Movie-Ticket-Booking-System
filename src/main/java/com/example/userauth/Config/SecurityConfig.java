@@ -44,6 +44,11 @@ public class SecurityConfig {
                         .requestMatchers("/ws-booking/**").permitAll()
                         .requestMatchers("/customer/signin/**").permitAll()
                         .requestMatchers("/admin/**").authenticated()
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 );
 
