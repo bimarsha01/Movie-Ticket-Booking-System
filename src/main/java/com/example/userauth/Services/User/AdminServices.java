@@ -42,7 +42,7 @@ public class AdminServices {
         return userList.stream().map(user -> userMapper.toDto(user)).toList();
     }
 
-    public UserResponseDto getuserbyusername(String username) {
+    public UserResponseDto getUserByUsername(String username) {
 
         log.info("getting the user with the username");
 

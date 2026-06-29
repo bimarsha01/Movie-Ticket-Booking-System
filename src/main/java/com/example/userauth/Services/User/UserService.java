@@ -38,7 +38,7 @@ import java.util.Set;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class userService {
+public class UserService {
 
     private final userMapper userMapper;
     private final UserRepo userRepo;

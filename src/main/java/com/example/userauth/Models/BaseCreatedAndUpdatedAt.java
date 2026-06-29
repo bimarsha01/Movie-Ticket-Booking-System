@@ -8,7 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-//now what this keyword does is that it does not create any table but make sure it appears in every child entity.
 public abstract class BaseCreatedAndUpdatedAt {
 
     @CreationTimestamp

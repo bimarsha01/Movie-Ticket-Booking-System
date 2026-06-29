@@ -16,7 +16,6 @@ public class jwtResponse {
     private String username;
     private List<String> roles;
 
-    // Manual constructor to ensure "Bearer" is handled correctly
     public jwtResponse(String accessToken, Long id, String username, List<String> roles) {
         this.token = accessToken;
         this.id = id;

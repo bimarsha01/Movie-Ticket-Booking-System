@@ -3,7 +3,7 @@ package com.example.userauth.Config;
 import com.example.userauth.Models.Enums.ERole;
 import com.example.userauth.Models.Roles;
 import com.example.userauth.Repo.RolesRepo;
-import com.example.userauth.Services.User.userService;
+import com.example.userauth.Services.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class RoleDataLoader implements CommandLineRunner {
 
     private final RolesRepo rolesRepo;
-    private final userService userService;
+    private final UserService userService;
 
     @Override
     public void run(String... args) throws Exception {

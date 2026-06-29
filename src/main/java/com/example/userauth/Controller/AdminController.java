@@ -3,12 +3,8 @@ package com.example.userauth.Controller;
 import com.example.userauth.API.ApiResponse;
 import com.example.userauth.DTOs.AdminRequestDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
-import com.example.userauth.Models.AdminRequestForTheatre;
 import com.example.userauth.Services.User.AdminServices;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +46,7 @@ public class AdminController extends BaseController{
     @PreAuthorize("hasAuthority('Role_Admin')")
     public ResponseEntity<ApiResponse> getuserbyusername(@PathVariable String username){
         log.info("getting user by username");
-        UserResponseDto userResponseDto = adminServices.getuserbyusername(username);
+        UserResponseDto userResponseDto = adminServices.getUserByUsername(username);
             if(userResponseDto == null){
                 log.error("There was an error during getting all the users");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

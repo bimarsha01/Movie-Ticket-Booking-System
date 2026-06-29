@@ -33,7 +33,7 @@ public class Screens {
      @Column(name = "total_seats", nullable = false)
     private Integer totalSeats;
 
-    @ManyToOne
+    @ManyToOne   @Column(name = "user_name", nullable = false)
     @JoinColumn(name = "theatre_id", nullable = false)
     private Theatre theatre;
 

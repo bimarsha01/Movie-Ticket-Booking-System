@@ -6,7 +6,7 @@ import com.example.userauth.DTOs.ChangepasswordDto;
 import com.example.userauth.DTOs.UserDtos.SigninDto;
 import com.example.userauth.DTOs.UserDtos.UserCreationDto;
 import com.example.userauth.DTOs.UserDtos.UserResponseDto;
-import com.example.userauth.Services.User.userService;
+import com.example.userauth.Services.User.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import com.example.userauth.DTOs.Others.jwtResponse;
 @AllArgsConstructor
 public class UserController extends BaseController {
 
-    private final userService userServices;
+    private final UserService userServices;
 
     @PostMapping("/signup/user")
     public ResponseEntity<ApiResponse> userSignup(@Valid @RequestBody UserCreationDto userCreationDto) {
