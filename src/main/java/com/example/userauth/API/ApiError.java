@@ -15,6 +15,4 @@ public class ApiError {
         private String error;
         private Boolean success;
         private Object data;
-
-
 }
