@@ -44,8 +44,8 @@ public class GlobalExceptionHandling extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error , HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ApiResponse> unauthorizedException(UnauthorizedException ex){
-        ApiResponse error = new ApiResponse(ex.getMessage() , Boolean.FALSE , "");
+    public ResponseEntity<ApiError> unauthorizedException(UnauthorizedException ex){
+        ApiError error = new ApiError(ex.getMessage() , Boolean.FALSE , "");
         return new ResponseEntity<>(error , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
